@@ -14,25 +14,14 @@ import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<div class="page-frame page-pad mx-auto max-w-[calc(var(--content-max)+var(--page-pad-x)*2)]">
 		<article class="prose prose-lg max-w-none">
 			<p>
-				你好，我是 <strong>{SITE_AUTHOR}</strong>。{SITE_DESCRIPTION}
+				你好，我是 <strong>{SITE_AUTHOR}</strong>。这里是我的个人博客，记录技术、思考与生活。
 			</p>
 			<p>
-				这里是我的个人博客，用 <a href="https://astro.build">Astro</a> 构建，内容以 Markdown / MDX
-				存放在 Git 仓库，部署在 Cloudflare Pages —— 零服务器成本、极致性能。
+				文章以 Markdown 撰写，站点基于 Astro 构建，部署于 Cloudflare Pages。
 			</p>
-			<h2>技术栈</h2>
-			<ul>
-				<li>框架：Astro（全静态 SSG）</li>
-				<li>样式：Tailwind CSS · Kami 视觉语言</li>
-				<li>布局参考：Cloudflare Blog 信息架构</li>
-				<li>搜索：Pagefind</li>
-				<li>评论：Giscus（GitHub Discussions）</li>
-				<li>部署：Cloudflare Pages</li>
-			</ul>
-			<p>
-				欢迎通过导航栏的文章、归档与标签探索内容。站点仓库与配置说明见项目 README。
+			<p class="text-[var(--stone)] text-base not-prose">
+				{SITE_TITLE} · {SITE_DESCRIPTION}
 			</p>
-			<p class="text-[var(--stone)] text-base not-prose">站点名：{SITE_TITLE}</p>
 		</article>
 	</div>
 </BaseLayout>
