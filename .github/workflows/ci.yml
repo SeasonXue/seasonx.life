@@ -1,5 +1,4 @@
-# Gate: typecheck + production build on every PR and push.
-# Deploy: main only, when Cloudflare secrets are configured.
+# Typecheck + production build on every PR and push.
 name: CI
 
 on:
@@ -40,72 +39,4 @@ jobs:
       - name: Production build
         run: pnpm build
         env:
-          # Optional: inject analytics token at build time (public client token)
           PUBLIC_CF_ANALYTICS_TOKEN: ${{ secrets.PUBLIC_CF_ANALYTICS_TOKEN }}
-
-      - name: Upload dist artifact
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          retention-days: 3
-
-  deploy:
-    name: Deploy to Cloudflare
-    needs: gate
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Check Cloudflare credentials
-        id: creds
-        env:
-          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          if [ -z "$TOKEN" ] || [ -z "$ACCOUNT" ]; then
-            echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping deploy: set CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets to enable."
-          else
-            echo "configured=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Checkout
-        if: steps.creds.outputs.configured == 'true'
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        if: steps.creds.outputs.configured == 'true'
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
-
-      - name: Setup Node.js
-        if: steps.creds.outputs.configured == 'true'
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: pnpm
-
-      - name: Install dependencies
-        if: steps.creds.outputs.configured == 'true'
-        run: pnpm install --frozen-lockfile
-
-      - name: Download dist artifact
-        if: steps.creds.outputs.configured == 'true'
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-
-      - name: Deploy with Wrangler
-        if: steps.creds.outputs.configured == 'true'
-        # v4 runs on Node 24 (avoids Node 20 deprecation on GHA runners)
-        uses: cloudflare/wrangler-action@v4
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          # Use the wrangler already installed via pnpm (see package.json)
-          packageManager: pnpm
-          command: deploy

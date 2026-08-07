@@ -111,7 +111,7 @@ draft: false                  # true 时生产构建不输出
 - `SITE_TITLE` / `SITE_DESCRIPTION` / `SITE_AUTHOR` / `SITE_URL`
 - `SOCIAL_LINKS`（GitHub、Twitter、Email）
 - `GISCUS`（评论，见下）
-- Web Analytics：用环境变量 `PUBLIC_CF_ANALYTICS_TOKEN`（见上文）
+- Web Analytics：用环境变量 `PUBLIC_CF_ANALYTICS_TOKEN`（见下文）
 
 并同步修改 `astro.config.mjs` 中的 `site` 与 `public/robots.txt` 中的 Sitemap 地址。
 
@@ -128,12 +128,13 @@ draft: false                  # true 时生产构建不输出
 
 1. Cloudflare 仪表盘 → **Web Analytics** → 添加站点（主机名填 `seasonx.life`）
 2. 复制 JS snippet 中的 **token**
-3. 任选一种注入方式（构建时读入，会写进 HTML）：
+3. 构建时通过环境变量 `PUBLIC_CF_ANALYTICS_TOKEN` 注入（会写进 HTML）：
 
-| 方式 | 做法 |
+| 环境 | 做法 |
 |------|------|
-| 本地 | 复制 `.env.example` 为 `.env`，设置 `PUBLIC_CF_ANALYTICS_TOKEN=...` |
-| GitHub Actions | Repo / Environment secrets 增加 `PUBLIC_CF_ANALYTICS_TOKEN` |
+| 生产 / Preview | Worker → **Settings → Variables**（Build environment variables）设置 `PUBLIC_CF_ANALYTICS_TOKEN` |
+| 本地 | 复制 `.env.example` 为 `.env`，设置同名变量 |
+| CI | 可选：GitHub Repository secret `PUBLIC_CF_ANALYTICS_TOKEN` |
 | 临时 | `PUBLIC_CF_ANALYTICS_TOKEN=... pnpm build` |
 
 留空则不注入统计脚本。Token 会出现在前端 HTML 中，属于站点公开标识，但仍建议用环境变量管理、不要提交 `.env`。
@@ -142,19 +143,9 @@ draft: false                  # true 时生产构建不输出
 
 纯静态输出，**不需要** `@astrojs/cloudflare` adapter。仓库内 `wrangler.jsonc` 将 `dist/` 作为 Static Assets 托管；未知路径返回自定义 `404` 页（HTTP 404）。
 
-新项目请使用 **Workers + Static Assets**（官方推荐），不要新建经典 Cloudflare Pages 项目。
+使用 **Workers + Static Assets**；生产部署通过 **Workers Builds**（连接 Git）完成。
 
-### 本地命令
-
-```bash
-pnpm cf:dev         # build + wrangler dev（接近生产：headers / 404）
-pnpm cf:deploy      # build + wrangler deploy
-pnpm cf:deploy:dry  # 干跑，不上传
-```
-
-首次部署前执行一次：`npx wrangler login`。
-
-### 方式一：Workers Builds（连接 Git，推荐）
+### Workers Builds（连接 Git）
 
 1. 将代码推送到 GitHub
 2. [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create** → 导入仓库（创建 **Worker**，非 Pages）
@@ -166,18 +157,21 @@ pnpm cf:deploy:dry  # 干跑，不上传
 | Deploy command | `npx wrangler deploy` |
 | Node.js version | `22`（Environment variables：`NODE_VERSION=22`） |
 | 生产分支 | `main` |
+| Build 环境变量 | 可选：`PUBLIC_CF_ANALYTICS_TOKEN`（见上文 Web Analytics） |
 
 4. Save and Deploy
 
-之后推送到 `main` 自动生产部署；PR 可获得 Preview URL。
+推送到 `main` 自动生产部署；PR 可获得 Preview URL。
 
-### 方式二：Wrangler CLI（本地 / 应急）
+### 本地 Wrangler
 
 ```bash
-pnpm cf:deploy
+pnpm cf:dev         # build + wrangler dev
+pnpm cf:deploy      # build + wrangler deploy
+pnpm cf:deploy:dry  # 干跑，不上传
 ```
 
-等价于 `pnpm build && wrangler deploy`，配置读取根目录 `wrangler.jsonc`。
+首次使用前执行一次：`npx wrangler login`。
 
 ### 自定义域名
 
@@ -199,26 +193,15 @@ Worker → **Settings → Domains & Routes** → 添加 `seasonx.life`（域名�
 
 若以后引入新的第三方脚本 / iframe，需同步更新 `public/_headers` 中的 `Content-Security-Policy`。
 
-### GitHub Actions 门禁与部署
+### CI
 
 工作流：`.github/workflows/ci.yml`
 
 | 触发 | 行为 |
 |------|------|
-| PR / push | `pnpm check` + `pnpm build`（门禁） |
-| push 到 `main` | 门禁通过后，用 Wrangler 部署到 Cloudflare |
+| PR / push | `pnpm check` + `pnpm build` |
 
-**Repository secrets**（GitHub → Settings → Secrets and variables → Actions）：
-
-| Secret | 说明 |
-|--------|------|
-| `CLOUDFLARE_API_TOKEN` | 可选；有则在 `main` 上自动 `wrangler deploy` |
-| `CLOUDFLARE_ACCOUNT_ID` | 与上一项成对配置 |
-| `PUBLIC_CF_ANALYTICS_TOKEN` | 可选，构建时注入 Web Analytics |
-
-未配置 Cloudflare secrets 时：**门禁照常通过**，部署步骤会跳过（绿色 skip），可继续用本地 `pnpm cf:deploy` 或 Workers Builds。
-
-创建 API Token 建议：[Cloudflare API Tokens](https://dash.cloudflare.com/profile/api-tokens) → Create Token → 使用「Edit Cloudflare Workers」模板并按需收紧。
+可选 Repository secret：`PUBLIC_CF_ANALYTICS_TOKEN`（构建时注入 analytics beacon）。
 
 ## 搜索说明
 
