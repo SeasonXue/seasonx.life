@@ -34,7 +34,12 @@ export const GISCUS = {
 
 /**
  * Cloudflare Web Analytics（可选）
- * 在 Cloudflare 仪表盘 → Web Analytics 获取 token 后填入
- * 留空则不注入统计脚本
+ *
+ * 优先读取构建时环境变量 `PUBLIC_CF_ANALYTICS_TOKEN`
+ * （本地 `.env` / GitHub Actions secret / CI 环境变量）。
+ * 留空则不注入统计脚本。
+ *
+ * 获取：Cloudflare 仪表盘 → Web Analytics → 添加/管理站点 → JS snippet 中的 token
  */
-export const CF_ANALYTICS_TOKEN = '';
+export const CF_ANALYTICS_TOKEN =
+	(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN as string | undefined)?.trim() || '';

@@ -1,0 +1,16 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "seasonx-life",
+	// Bump when you intentionally adopt new runtime behavior
+	"compatibility_date": "2026-08-07",
+	"assets": {
+		"directory": "./dist",
+		// Serve dist/404.html with HTTP 404 for unknown routes (SSG)
+		"not_found_handling": "404-page",
+		// Directory indexes with trailing slash; files without
+		"html_handling": "auto-trailing-slash"
+	},
+	"observability": {
+		"enabled": true
+	}
+}

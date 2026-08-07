@@ -106,12 +106,13 @@ const jsonLd =
 <meta name="twitter:description" content={description} />
 {ogImage && <meta name="twitter:image" content={ogImage} />}
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
 {
 	CF_ANALYTICS_TOKEN && (
 		<script
-			defer
+			is:inline
+			type="module"
 			src="https://static.cloudflareinsights.com/beacon.min.js"
 			data-cf-beacon={JSON.stringify({ token: CF_ANALYTICS_TOKEN })}
 		/>
