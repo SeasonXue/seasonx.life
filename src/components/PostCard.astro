@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+import { formatReadingTime, getReadingTime } from '../utils/reading-time';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+	featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const minutes = getReadingTime(post.body ?? '');
+const { title, description, pubDate, heroImage, tags, category } = post.data;
+---
+
+<article
+	class:list={[
+		'group rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] overflow-hidden transition-shadow hover:shadow-md',
+		featured && 'sm:col-span-2',
+	]}
+>
+	{
+		heroImage && (
+			<a href={`/blog/${post.id}/`} class="block overflow-hidden no-underline" tabindex="-1" aria-hidden="true">
+				<div class:list={[featured ? 'aspect-[2/1]' : 'aspect-[16/9]']}>
+					<Image
+						src={heroImage}
+						alt=""
+						width={featured ? 1200 : 720}
+						height={featured ? 600 : 405}
+						class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+					/>
+				</div>
+			</a>
+		)
+	}
+	<div class="p-5 sm:p-6">
+		<a href={`/blog/${post.id}/`} class="block no-underline">
+			<h2
+				class:list={[
+					'font-bold text-[var(--fg)] group-hover:text-[var(--accent)] transition-colors leading-snug',
+					featured ? 'text-2xl sm:text-3xl' : 'text-lg sm:text-xl',
+				]}
+			>
+				{title}
+			</h2>
+			<p class="mt-2 line-clamp-2 text-sm text-[var(--fg-muted)] leading-relaxed">
+				{description}
+			</p>
+		</a>
+		<div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--fg-muted)]">
+			<span class="inline-flex items-center gap-1.5">
+				<svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+				</svg>
+				<FormattedDate date={pubDate} />
+			</span>
+			<span class="inline-flex items-center gap-1.5">
+				<svg class="h-3.5 w-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+				{formatReadingTime(minutes)}
+			</span>
+			{
+				category && (
+					<a
+						href={`/categories/${encodeURIComponent(category)}/`}
+						class="rounded-full bg-[var(--code-bg)] px-2.5 py-0.5 text-xs font-medium text-[var(--fg)] no-underline hover:text-[var(--accent)] transition-colors"
+					>
+						{category}
+					</a>
+				)
+			}
+		</div>
+		{
+			tags.length > 0 && (
+				<div class="mt-2 flex flex-wrap gap-2">
+					{tags.map((tag) => (
+						<a
+							href={`/tags/${encodeURIComponent(tag)}/`}
+							class="rounded-md border border-[var(--border)] px-2 py-0.5 text-xs text-[var(--fg-muted)] no-underline hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors"
+						>
+							#{tag}
+						</a>
+					))}
+				</div>
+			)
+		}
+	</div>
+</article>

@@ -1,0 +1,43 @@
+---
+---
+
+<div id="search" class="pagefind-ui"></div>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+<script is:inline>
+	(function () {
+		const mount = document.getElementById('search');
+		if (!mount) return;
+
+		const script = document.createElement('script');
+		script.src = '/pagefind/pagefind-ui.js';
+		script.onload = function () {
+			// PagefindUI 由 pagefind-ui.js 注入全局
+			// eslint-disable-next-line no-undef
+			new PagefindUI({
+				element: '#search',
+				showSubResults: true,
+				showImages: false,
+				excerptLength: 30,
+				translations: {
+					placeholder: '搜索文章…',
+					clear_search: '清除',
+					load_more: '加载更多',
+					search_label: '搜索本站',
+					filters_label: '筛选',
+					zero_results: '没有找到 [SEARCH_TERM]',
+					many_results: '找到 [COUNT] 个结果',
+					one_result: '找到 [COUNT] 个结果',
+					alt_search: '没有找到 [SEARCH_TERM]。显示 [DIFFERENT_TERM] 的结果',
+					search_suggestion: '没有找到 [SEARCH_TERM]。试试：',
+					searching: '正在搜索 [SEARCH_TERM]…',
+				},
+			});
+		};
+		script.onerror = function () {
+			mount.innerHTML =
+				'<p class="text-sm text-[var(--fg-muted)]">搜索索引尚未生成。请先运行 <code class="rounded bg-[var(--code-bg)] px-1">pnpm build</code> 后再预览。</p>';
+		};
+		document.head.appendChild(script);
+	})();
+</script>

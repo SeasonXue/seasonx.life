@@ -1,0 +1,42 @@
+---
+import FormattedDate from '../components/FormattedDate.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
+import { getPublishedPosts, groupPostsByYear } from '../utils/posts';
+
+const posts = await getPublishedPosts();
+const byYear = groupPostsByYear(posts);
+---
+
+<BaseLayout title="归档" description={`${SITE_TITLE} 文章归档`}>
+	<header class="mb-10">
+		<h1 class="text-3xl font-bold tracking-tight text-[var(--fg)]">归档</h1>
+		<p class="mt-2 text-[var(--fg-muted)]">按时间浏览全部 {posts.length} 篇文章</p>
+	</header>
+
+	{
+		[...byYear.entries()].map(([year, yearPosts]) => (
+			<section class="mb-10">
+				<h2 class="mb-4 text-xl font-bold text-[var(--fg)] border-b border-[var(--border)] pb-2">
+					{year}
+					<span class="ml-2 text-sm font-normal text-[var(--fg-muted)]">({yearPosts.length})</span>
+				</h2>
+				<ul class="space-y-3">
+					{yearPosts.map((post) => (
+						<li class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
+							<span class="shrink-0 text-sm text-[var(--fg-muted)] tabular-nums w-28">
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+							<a
+								href={`/blog/${post.id}/`}
+								class="font-medium text-[var(--fg)] no-underline hover:text-[var(--accent)] transition-colors"
+							>
+								{post.data.title}
+							</a>
+						</li>
+					))}
+				</ul>
+			</section>
+		))
+	}
+</BaseLayout>

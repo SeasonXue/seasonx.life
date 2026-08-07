@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import type { MarkdownHeading } from 'astro';
+import Giscus from '../components/Giscus.astro';
+import PostMeta from '../components/PostMeta.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import BaseLayout from './BaseLayout.astro';
+import { getReadingTime } from '../utils/reading-time';
+
+type Props = {
+	post: CollectionEntry<'blog'>;
+	headings: MarkdownHeading[];
+	body: string;
+};
+
+const { post, headings, body } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, tags, category } = post.data;
+const minutes = getReadingTime(body);
+---
+
+<BaseLayout
+	title={title}
+	description={description}
+	image={heroImage}
+	type="article"
+	pubDate={pubDate}
+	updatedDate={updatedDate}
+>
+	<article data-pagefind-body>
+		{
+			heroImage && (
+				<div class="mb-8 overflow-hidden rounded-2xl">
+					<Image
+						width={1200}
+						height={630}
+						src={heroImage}
+						alt={title}
+						class="h-auto w-full object-cover"
+						priority
+					/>
+				</div>
+			)
+		}
+
+		<header class="mb-8 text-center sm:text-left">
+			<h1 class="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl leading-tight" data-pagefind-meta="title">
+				{title}
+			</h1>
+			<p class="mt-3 text-[var(--fg-muted)]" data-pagefind-meta="description">{description}</p>
+			<div class="mt-4 flex justify-center sm:justify-start">
+				<PostMeta
+					pubDate={pubDate}
+					updatedDate={updatedDate}
+					readingMinutes={minutes}
+					tags={tags}
+					category={category}
+				/>
+			</div>
+		</header>
+
+		<hr class="mb-8 border-[var(--border)]" />
+
+		<TableOfContents headings={headings} />
+
+		<div class="prose prose-lg max-w-none dark:prose-invert">
+			<slot />
+		</div>
+
+		<Giscus />
+	</article>
+</BaseLayout>

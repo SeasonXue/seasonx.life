@@ -1,0 +1,53 @@
+---
+import PostCard from '../components/PostCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getPublishedPosts } from '../utils/posts';
+
+const posts = (await getPublishedPosts()).slice(0, 5);
+---
+
+<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+	<section class="mb-12">
+		<h1 class="text-3xl font-bold tracking-tight text-[var(--fg)] sm:text-4xl">
+			你好，我是 {SITE_TITLE}
+		</h1>
+		<p class="mt-4 max-w-xl text-lg text-[var(--fg-muted)] leading-relaxed">
+			{SITE_DESCRIPTION}
+		</p>
+		<div class="mt-6 flex flex-wrap gap-3">
+			<a
+				href="/blog"
+				class="inline-flex items-center rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-medium text-white no-underline transition-colors hover:bg-[var(--accent-hover)]"
+			>
+				浏览文章
+			</a>
+			<a
+				href="/about"
+				class="inline-flex items-center rounded-lg border border-[var(--border)] px-4 py-2 text-sm font-medium text-[var(--fg)] no-underline transition-colors hover:border-[var(--fg-muted)]"
+			>
+				关于我
+			</a>
+		</div>
+	</section>
+
+	<section>
+		<div class="mb-6 flex items-end justify-between">
+			<h2 class="text-xl font-bold text-[var(--fg)]">最新文章</h2>
+			<a href="/blog" class="text-sm text-[var(--accent)] no-underline hover:underline">
+				查看全部 →
+			</a>
+		</div>
+		{
+			posts.length === 0 ? (
+				<p class="text-[var(--fg-muted)]">暂无文章。</p>
+			) : (
+				<div class="grid gap-6 sm:grid-cols-2">
+					{posts.map((post, i) => (
+						<PostCard post={post} featured={i === 0} />
+					))}
+				</div>
+			)
+		}
+	</section>
+</BaseLayout>

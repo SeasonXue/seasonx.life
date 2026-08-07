@@ -1,0 +1,14 @@
+---
+import Search from '../components/Search.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<BaseLayout title="搜索" description={`搜索 ${SITE_TITLE}`}>
+	<header class="mb-8">
+		<h1 class="text-3xl font-bold tracking-tight text-[var(--fg)]">搜索</h1>
+		<p class="mt-2 text-[var(--fg-muted)]">全文检索站内文章（由 Pagefind 驱动）</p>
+	</header>
+
+	<Search />
+</BaseLayout>

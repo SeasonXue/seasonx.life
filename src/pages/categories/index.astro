@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../../consts';
+import { getAllCategories, getPublishedPosts } from '../../utils/posts';
+
+const posts = await getPublishedPosts();
+const categories = getAllCategories(posts);
+---
+
+<BaseLayout title="分类" description={`${SITE_TITLE} 全部分类`}>
+	<header class="mb-10">
+		<h1 class="text-3xl font-bold tracking-tight text-[var(--fg)]">分类</h1>
+		<p class="mt-2 text-[var(--fg-muted)]">共 {categories.size} 个分类</p>
+	</header>
+
+	{
+		categories.size === 0 ? (
+			<p class="text-[var(--fg-muted)]">暂无分类。</p>
+		) : (
+			<ul class="grid gap-3 sm:grid-cols-2">
+				{[...categories.entries()].map(([category, count]) => (
+					<li>
+						<a
+							href={`/categories/${encodeURIComponent(category)}/`}
+							class="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--bg-elevated)] px-5 py-4 no-underline transition-colors hover:border-[var(--accent)]"
+						>
+							<span class="font-medium text-[var(--fg)]">{category}</span>
+							<span class="text-sm text-[var(--fg-muted)]">{count} 篇</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		)
+	}
+</BaseLayout>
