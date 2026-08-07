@@ -20,14 +20,14 @@ export const SOCIAL_LINKS = {
  * 3. 填入下方字段；repo 为空时不渲染评论组件
  */
 export const GISCUS = {
-	repo: '', // 例如 'seasonx/seasonx.life'
-	repoId: '',
+	repo: 'SeasonXue/seasonx.life',
+	repoId: 'R_kgDOTxOgcA',
 	category: 'Announcements',
-	categoryId: '',
+	categoryId: 'DIC_kwDOTxOgcM4DC32b',
 	mapping: 'pathname' as const,
 	reactionsEnabled: '1' as const,
 	emitMetadata: '0' as const,
-	inputPosition: 'top' as const,
+	inputPosition: 'bottom' as const,
 	lang: 'zh-CN' as const,
 	loading: 'lazy' as const,
 };
