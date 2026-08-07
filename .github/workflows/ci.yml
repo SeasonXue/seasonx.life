@@ -101,8 +101,11 @@ jobs:
 
       - name: Deploy with Wrangler
         if: steps.creds.outputs.configured == 'true'
-        uses: cloudflare/wrangler-action@v3
+        # v4 runs on Node 24 (avoids Node 20 deprecation on GHA runners)
+        uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          # Use the wrangler already installed via pnpm (see package.json)
+          packageManager: pnpm
           command: deploy
