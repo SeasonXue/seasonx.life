@@ -4,9 +4,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout title="搜索" description="全文搜索文章">
-	<header class="mb-8">
-		<h1 class="text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">搜索</h1>
-		<p class="mt-2 text-[var(--olive)]">全文检索站内文章（由 Pagefind 驱动）</p>
-	</header>
-	<Search />
+	<div class="section-rule">
+		<div class="page-frame page-pad">
+			<h1 class="page-title">搜索</h1>
+			<p class="page-description">全文检索站内文章（由 Pagefind 驱动）</p>
+		</div>
+	</div>
+	<div class="page-frame page-pad">
+		<Search />
+	</div>
 </BaseLayout>

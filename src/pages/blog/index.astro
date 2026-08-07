@@ -1,27 +1,23 @@
 ---
-import PostCard from '../../components/PostCard.astro';
+import PostFeed from '../../components/PostFeed.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { SITE_TITLE } from '../../consts';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
 import { getPublishedPosts } from '../../utils/posts';
 
 const posts = await getPublishedPosts();
 ---
 
 <BaseLayout title="文章" description={`${SITE_TITLE} 的全部文章`}>
-	<header class="mb-10">
-		<h1 class="text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">文章</h1>
-		<p class="mt-2 text-[var(--olive)]">共 {posts.length} 篇</p>
-	</header>
+	<div class="feed-band feed-band--connectors">
+		<div class="feed-frame feed-frame--rails">
+			<header class="feed-pad">
+				<h1 class="feed-page-title">文章</h1>
+				<p class="feed-page-description">
+					共 {posts.length} 篇 · {SITE_DESCRIPTION}
+				</p>
+			</header>
+		</div>
+	</div>
 
-	{
-		posts.length === 0 ? (
-			<p class="text-[var(--olive)]">暂无文章。</p>
-		) : (
-			<div class="grid gap-5 sm:grid-cols-2">
-				{posts.map((post, i) => (
-					<PostCard post={post} featured={i === 0} />
-				))}
-			</div>
-		)
-	}
+	<PostFeed posts={posts} featuredFirst pageSize={12} />
 </BaseLayout>

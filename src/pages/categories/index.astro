@@ -8,28 +8,41 @@ const categories = getAllCategories(posts);
 ---
 
 <BaseLayout title="分类" description={`${SITE_TITLE} 全部分类`}>
-	<header class="mb-10">
-		<h1 class="text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">分类</h1>
-		<p class="mt-2 text-[var(--olive)]">共 {categories.size} 个分类</p>
-	</header>
+	<div class="feed-band feed-band--connectors">
+		<div class="feed-frame feed-frame--rails">
+			<header class="feed-pad">
+				<h1 class="feed-page-title">分类</h1>
+				<p class="feed-page-description">共 {categories.size} 个分类</p>
+			</header>
+		</div>
+	</div>
 
-	{
-		categories.size === 0 ? (
-			<p class="text-[var(--olive)]">暂无分类。</p>
-		) : (
-			<ul class="grid gap-3 sm:grid-cols-2">
-				{[...categories.entries()].map(([category, count]) => (
-					<li>
-						<a
-							href={`/categories/${encodeURIComponent(category)}/`}
-							class="flex items-center justify-between rounded-xl bg-[var(--ivory)] px-5 py-4 no-underline transition-shadow hover:shadow-[var(--shadow-whisper)]"
-						>
-							<span class="font-medium text-[var(--fg)]">{category}</span>
-							<span class="text-sm text-[var(--stone)]">{count} 篇</span>
-						</a>
-					</li>
-				))}
-			</ul>
-		)
-	}
+	<div class="feed-band">
+		<div class="feed-frame feed-frame--rails">
+			<div class="feed-pad">
+				{categories.size === 0 ? (
+					<p class="text-[var(--olive)]">暂无分类。</p>
+				) : (
+					<ul class="m-0 grid list-none gap-0 p-0 sm:grid-cols-2">
+						{[...categories.entries()].map(([category, count], i) => (
+							<li
+								class:list={[
+									'border-b border-dashed border-[var(--border)]',
+									i % 2 === 0 && 'sm:border-e',
+								]}
+							>
+								<a
+									href={`/categories/${encodeURIComponent(category)}/`}
+									class="flex items-center justify-between px-0 py-5 no-underline transition-colors hover:text-[var(--accent)] sm:px-6 sm:py-8"
+								>
+									<span class="text-xl font-medium text-[var(--fg)]">{category}</span>
+									<span class="feed-date">{count} 篇</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+		</div>
+	</div>
 </BaseLayout>

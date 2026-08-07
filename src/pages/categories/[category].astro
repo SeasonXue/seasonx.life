@@ -1,7 +1,11 @@
 ---
-import PostCard from '../../components/PostCard.astro';
+import PostFeed from '../../components/PostFeed.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getAllCategories, getPostsByCategory, getPublishedPosts } from '../../utils/posts';
+import {
+	getAllCategories,
+	getPostsByCategory,
+	getPublishedPosts,
+} from '../../utils/posts';
 
 export async function getStaticPaths() {
 	const posts = await getPublishedPosts();
@@ -13,22 +17,24 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.props;
-const posts = getPostsByCategory(await getPublishedPosts(), category);
+const all = await getPublishedPosts();
+const posts = getPostsByCategory(all, category);
 ---
 
 <BaseLayout title={`分类：${category}`} description={`分类「${category}」下的文章`}>
-	<header class="mb-8">
-		<p class="text-sm text-[var(--stone)]">
-			<a href="/categories" class="text-[var(--accent)] no-underline hover:underline">分类</a>
-			<span class="mx-1">/</span>
-		</p>
-		<h1 class="mt-1 text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">
-			{category}
-		</h1>
-		<p class="mt-2 text-[var(--olive)]">{posts.length} 篇文章</p>
-	</header>
-
-	<div class="grid gap-5 sm:grid-cols-2">
-		{posts.map((post) => <PostCard post={post} />)}
+	<div class="feed-band feed-band--connectors">
+		<div class="feed-frame feed-frame--rails">
+			<header class="feed-pad">
+				<p class="feed-date" style="margin-bottom: 0.75rem; text-transform: none; letter-spacing: 0;">
+					<a href="/categories" class="text-[var(--accent)] no-underline hover:underline">分类</a>
+					<span class="mx-1">/</span>
+					{category}
+				</p>
+				<h1 class="feed-page-title">{category}</h1>
+				<p class="feed-page-description">{posts.length} 篇文章</p>
+			</header>
+		</div>
 	</div>
+
+	<PostFeed posts={posts} featuredFirst={false} pageSize={12} />
 </BaseLayout>

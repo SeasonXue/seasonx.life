@@ -6,8 +6,10 @@ const enabled = Boolean(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
 
 {
 	enabled && (
-		<section class="mt-12 border-t border-[var(--border-soft)] pt-10" aria-label="评论">
-			<h2 class="mb-6 text-xl font-medium text-[var(--fg)]">评论</h2>
+		<section class="section-rule-top pt-10" aria-label="评论">
+			<h2 class="related-heading mb-6!" style="margin-bottom: 1.5rem; font-size: 0.875rem;">
+				评论
+			</h2>
 			<script
 				src="https://giscus.app/client.js"
 				data-repo={GISCUS.repo}

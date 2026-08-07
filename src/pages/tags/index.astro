@@ -9,30 +9,38 @@ const max = Math.max(...tags.values(), 1);
 ---
 
 <BaseLayout title="标签" description={`${SITE_TITLE} 全部标签`}>
-	<header class="mb-10">
-		<h1 class="text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">标签</h1>
-		<p class="mt-2 text-[var(--olive)]">共 {tags.size} 个标签</p>
-	</header>
+	<div class="feed-band feed-band--connectors">
+		<div class="feed-frame feed-frame--rails">
+			<header class="feed-pad">
+				<h1 class="feed-page-title">标签</h1>
+				<p class="feed-page-description">共 {tags.size} 个标签</p>
+			</header>
+		</div>
+	</div>
 
-	{
-		tags.size === 0 ? (
-			<p class="text-[var(--olive)]">暂无标签。</p>
-		) : (
-			<div class="flex flex-wrap gap-2.5">
-				{[...tags.entries()].map(([tag, count]) => {
-					const scale = 0.85 + (count / max) * 0.4;
-					return (
-						<a
-							href={`/tags/${encodeURIComponent(tag)}/`}
-							class="tag inline-flex items-center gap-2 px-3 py-1.5 no-underline transition-shadow hover:shadow-[var(--shadow-whisper)]"
-							style={`font-size: ${scale}rem`}
-						>
-							<span class="font-medium">#{tag}</span>
-							<span class="text-xs opacity-70">{count}</span>
-						</a>
-					);
-				})}
+	<div class="feed-band">
+		<div class="feed-frame feed-frame--rails">
+			<div class="feed-pad">
+				{tags.size === 0 ? (
+					<p class="text-[var(--olive)]">暂无标签。</p>
+				) : (
+					<div class="flex flex-wrap gap-2.5">
+						{[...tags.entries()].map(([tag, count]) => {
+							const scale = 0.85 + (count / max) * 0.35;
+							return (
+								<a
+									href={`/tags/${encodeURIComponent(tag)}/`}
+									class="pill"
+									style={`font-size: ${scale}rem`}
+								>
+									#{tag}
+									<span class="ms-1 opacity-70">{count}</span>
+								</a>
+							);
+						})}
+					</div>
+				)}
 			</div>
-		)
-	}
+		</div>
+	</div>
 </BaseLayout>

@@ -12,9 +12,22 @@ interface Props {
 	type?: 'website' | 'article';
 	pubDate?: Date;
 	updatedDate?: Date;
+	/** Show reading progress bar (article pages) */
+	progress?: boolean;
+	/** Constrain main to reading width instead of full page frame */
+	narrow?: boolean;
 }
 
-const { title, description, image, type, pubDate, updatedDate } = Astro.props;
+const {
+	title,
+	description,
+	image,
+	type,
+	pubDate,
+	updatedDate,
+	progress = false,
+	narrow = false,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -30,10 +43,45 @@ const { title, description, image, type, pubDate, updatedDate } = Astro.props;
 		/>
 	</head>
 	<body class="flex min-h-screen flex-col">
+		<a href="#main-content" class="skip-link">跳到主要内容</a>
+		{progress && <div id="read-progress" aria-hidden="true" />}
 		<Header />
-		<main class="mx-auto w-full max-w-3xl flex-1 px-5 py-10 sm:px-8 sm:py-14">
-			<slot />
+		<main
+			id="main-content"
+			class:list={[
+				'flex-1 w-full',
+				narrow ? 'page-frame' : '',
+			]}
+		>
+			{
+				narrow ? (
+					<div class="mx-auto max-w-[var(--content-max)] px-[var(--page-pad-x)] py-10 sm:py-14">
+						<slot />
+					</div>
+				) : (
+					<slot />
+				)
+			}
 		</main>
 		<Footer />
+
+		{
+			progress && (
+				<script>
+					const bar = document.getElementById('read-progress');
+					if (bar) {
+						const onScroll = () => {
+							const el = document.documentElement;
+							const scrollTop = el.scrollTop || document.body.scrollTop;
+							const height = el.scrollHeight - el.clientHeight;
+							const pct = height > 0 ? Math.min(100, (scrollTop / height) * 100) : 0;
+							bar.style.width = `${pct}%`;
+						};
+						window.addEventListener('scroll', onScroll, { passive: true });
+						onScroll();
+					}
+				</script>
+			)
+		}
 	</body>
 </html>

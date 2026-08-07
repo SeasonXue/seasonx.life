@@ -1,85 +1,81 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
-import { formatReadingTime, getReadingTime } from '../utils/reading-time';
+import { SITE_AUTHOR } from '../consts';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
+	/** Full-width featured row (first post only) */
 	featured?: boolean;
 }
 
 const { post, featured = false } = Astro.props;
-const minutes = getReadingTime(post.body ?? '');
-const { title, description, pubDate, heroImage, tags, category } = post.data;
+const { title, description, pubDate, heroImage } = post.data;
+const href = `/blog/${post.id}/`;
+const dateLabel = pubDate.toLocaleDateString('en-US', {
+	year: 'numeric',
+	month: 'long',
+	day: 'numeric',
+});
+// Initials for avatar (CF byline)
+const initials = SITE_AUTHOR.replace(/[^\p{L}\p{N}\s]/gu, '')
+	.split(/\s+/)
+	.filter(Boolean)
+	.slice(0, 2)
+	.map((w) => w[0])
+	.join('')
+	.toUpperCase() || 'S';
 ---
 
-<article
-	class:list={[
-		'group overflow-hidden rounded-xl bg-[var(--ivory)] transition-shadow duration-200 hover:shadow-[var(--shadow-whisper)]',
-		featured && 'sm:col-span-2',
-	]}
->
-	{
-		heroImage && (
-			<a href={`/blog/${post.id}/`} class="block overflow-hidden no-underline" tabindex="-1" aria-hidden="true">
-				<div class:list={[featured ? 'aspect-[2/1]' : 'aspect-[16/9]']}>
-					<Image
-						src={heroImage}
-						alt=""
-						width={featured ? 1200 : 720}
-						height={featured ? 600 : 405}
-						class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-					/>
+{
+	featured ? (
+		<article class="feed-featured group">
+			<div class="feed-featured__copy">
+				<time class="feed-date" datetime={pubDate.toISOString()}>
+					{dateLabel}
+				</time>
+				<a href={href} class="feed-title-link group/title">
+					<h2 class="feed-featured__title">{title}</h2>
+				</a>
+				<p class="feed-featured__excerpt">{description}</p>
+				<div class="feed-byline">
+					<span class="feed-avatar" aria-hidden="true">
+						{initials}
+					</span>
+					<span class="feed-byline-name">{SITE_AUTHOR}</span>
 				</div>
+			</div>
+			{heroImage && (
+				<a href={href} class="feed-featured__media" tabindex="-1" aria-hidden="true">
+					<div class="feed-featured__frame">
+						<Image
+							src={heroImage}
+							alt=""
+							width={960}
+							height={540}
+							class="aspect-[16/9] object-cover"
+							loading="eager"
+							fetchpriority="high"
+						/>
+					</div>
+				</a>
+			)}
+		</article>
+	) : (
+		<article class="feed-cell">
+			<time class="feed-date" datetime={pubDate.toISOString()}>
+				{dateLabel}
+			</time>
+			<a href={href} class="feed-title-link group/title">
+				<h2 class="feed-cell__title">{title}</h2>
 			</a>
-		)
-	}
-	<div class="p-5 sm:p-6">
-		<a href={`/blog/${post.id}/`} class="block no-underline">
-			<h2
-				class:list={[
-					'font-medium text-[var(--fg)] transition-colors group-hover:text-[var(--accent)] leading-snug',
-					featured ? 'text-2xl sm:text-[1.75rem]' : 'text-lg sm:text-xl',
-				]}
-			>
-				{title}
-			</h2>
-			<p class="mt-2 line-clamp-2 text-sm text-[var(--olive)] leading-relaxed">
-				{description}
-			</p>
-		</a>
-		<div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-[var(--stone)]">
-			<span class="inline-flex items-center gap-1.5 tabular-nums">
-				<FormattedDate date={pubDate} />
-			</span>
-			<span class="inline-flex items-center gap-1.5">
-				{formatReadingTime(minutes)}
-			</span>
-			{
-				category && (
-					<a
-						href={`/categories/${encodeURIComponent(category)}/`}
-						class="tag"
-					>
-						{category}
-					</a>
-				)
-			}
-		</div>
-		{
-			tags.length > 0 && (
-				<div class="mt-2.5 flex flex-wrap gap-1.5">
-					{tags.map((tag) => (
-						<a
-							href={`/tags/${encodeURIComponent(tag)}/`}
-							class="tag tag-soft"
-						>
-							#{tag}
-						</a>
-					))}
-				</div>
-			)
-		}
-	</div>
-</article>
+			<p class="feed-cell__excerpt">{description}</p>
+			<div class="feed-byline">
+				<span class="feed-avatar" aria-hidden="true">
+					{initials}
+				</span>
+				<span class="feed-byline-name">{SITE_AUTHOR}</span>
+			</div>
+		</article>
+	)
+}

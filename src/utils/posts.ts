@@ -54,3 +54,32 @@ export function groupPostsByYear(posts: BlogPost[]): Map<number, BlogPost[]> {
 export function slugify(text: string): string {
 	return encodeURIComponent(text.trim().toLowerCase());
 }
+
+/** Related posts by shared category/tags; falls back to latest */
+export function getRelatedPosts(
+	posts: BlogPost[],
+	current: BlogPost,
+	limit = 4,
+): BlogPost[] {
+	const { category, tags } = current.data;
+	const scored = posts
+		.filter((p) => p.id !== current.id)
+		.map((p) => {
+			let score = 0;
+			if (category && p.data.category === category) score += 3;
+			for (const t of tags) {
+				if (p.data.tags.includes(t)) score += 1;
+			}
+			return { p, score };
+		})
+		.filter((x) => x.score > 0)
+		.sort(
+			(a, b) =>
+				b.score - a.score || b.p.data.pubDate.valueOf() - a.p.data.pubDate.valueOf(),
+		)
+		.slice(0, limit)
+		.map((x) => x.p);
+
+	if (scored.length > 0) return scored;
+	return posts.filter((p) => p.id !== current.id).slice(0, Math.min(3, limit));
+}

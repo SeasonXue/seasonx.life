@@ -1,0 +1,44 @@
+---
+---
+
+<button type="button" class="back-to-top" id="back-to-top" aria-label="回到顶部" hidden>
+	<svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+		<circle class="btt-track" cx="22" cy="22" r="18" stroke-width="2"></circle>
+		<circle class="btt-progress" cx="22" cy="22" r="18" stroke-width="2" id="btt-progress"></circle>
+		<path
+			d="M22 27V17M22 17l-5 5M22 17l5 5"
+			stroke="var(--fg)"
+			stroke-width="1.75"
+			fill="none"
+			stroke-linecap="round"
+			stroke-linejoin="round"
+		></path>
+	</svg>
+</button>
+
+<script>
+	const btn = document.getElementById('back-to-top') as HTMLButtonElement | null;
+	const ring = document.getElementById('btt-progress') as SVGCircleElement | null;
+	if (btn && ring) {
+		const C = 2 * Math.PI * 18;
+		ring.style.strokeDasharray = String(C);
+		btn.hidden = false;
+
+		const onScroll = () => {
+			const el = document.documentElement;
+			const top = el.scrollTop || document.body.scrollTop;
+			const height = el.scrollHeight - el.clientHeight;
+			const pct = height > 0 ? Math.min(1, top / height) : 0;
+			ring.style.strokeDashoffset = String(C * (1 - pct));
+			if (top > 320) btn.setAttribute('data-visible', '');
+			else btn.removeAttribute('data-visible');
+		};
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		onScroll();
+
+		btn.addEventListener('click', () => {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
+	}
+</script>

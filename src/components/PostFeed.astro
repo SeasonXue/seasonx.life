@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+
+interface Props {
+	posts: CollectionEntry<'blog'>[];
+	/** Show first post as full-width featured lead (CF homepage) */
+	featuredFirst?: boolean;
+	/** How many grid posts after featured to show initially */
+	pageSize?: number;
+}
+
+const { posts, featuredFirst = true, pageSize = 12 } = Astro.props;
+
+const lead = featuredFirst && posts.length > 0 ? posts[0] : null;
+const rest = lead ? posts.slice(1) : posts;
+const hasMore = rest.length > pageSize;
+---
+
+{
+	posts.length === 0 ? (
+		<p class="feed-empty">暂无文章。</p>
+	) : (
+		<div class="feed-page" data-post-feed data-page-size={pageSize}>
+			{/* Featured lead — CF full-bleed row */}
+			{lead && (
+				<div class="feed-band feed-band--connectors">
+					<div class="feed-frame feed-frame--rails">
+						<section class="feed-pad-featured">
+							<PostCard post={lead} featured />
+						</section>
+					</div>
+				</div>
+			)}
+
+			{/* 2-col archive — CF grid-cols-2, text-only cells */}
+			{rest.length > 0 && (
+				<div class="feed-band">
+					<div class="feed-grid feed-frame--rails" data-feed-grid>
+						{rest.map((post, i) => (
+							<div
+								class:list={[i >= pageSize && 'hidden']}
+								data-feed-item
+								data-index={i}
+							>
+								{/* wrapper keeps grid item; inner is the cell itself */}
+								<PostCard post={post} />
+							</div>
+						))}
+					</div>
+				</div>
+			)}
+
+			{hasMore && (
+				<div class="feed-load-more" data-load-more-wrap>
+					<button type="button" class="feed-load-btn" data-load-more>
+						加载更多
+					</button>
+				</div>
+			)}
+		</div>
+	)
+}
+
+{
+	hasMore && (
+		<script>
+			const root = document.querySelector('[data-post-feed]');
+			const grid = root?.querySelector('[data-feed-grid]');
+			const btn = root?.querySelector('[data-load-more]');
+			const wrap = root?.querySelector('[data-load-more-wrap]');
+			const size = Number(root?.getAttribute('data-page-size') || 12);
+			let shown = size;
+
+			btn?.addEventListener('click', () => {
+				const next = shown + size;
+				grid?.querySelectorAll('[data-feed-item]').forEach((el) => {
+					const idx = Number(el.getAttribute('data-index'));
+					if (idx < next) el.classList.remove('hidden');
+				});
+				shown = next;
+				const total = grid?.querySelectorAll('[data-feed-item]').length ?? 0;
+				if (shown >= total) wrap?.remove();
+			});
+		</script>
+	)
+}
