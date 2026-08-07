@@ -1,38 +1,60 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-@custom-variant dark (&:where(.dark, .dark *));
+/*
+ * Kami design tokens → blog surface
+ * Warm parchment, single ink-blue accent, one serif for the page.
+ * https://github.com/tw93/kami
+ */
 
 @theme {
-	--font-sans: var(--font-atkinson), system-ui, sans-serif;
-	--color-accent: #2563eb;
-	--color-accent-hover: #1d4ed8;
+	--font-sans: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+	--font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+	--font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, Monaco, 'Noto Serif SC', monospace;
+
+	--color-accent: #1b365d;
+	--color-accent-hover: #2d5a8a;
 }
 
-/* 亮色主题 */
 :root {
-	--bg: #fafafa;
-	--bg-elevated: #ffffff;
-	--fg: #171717;
-	--fg-muted: #737373;
-	--border: #e5e5e5;
-	--accent: #2563eb;
-	--accent-hover: #1d4ed8;
-	--code-bg: #f5f5f5;
-	--prose-fg: #262626;
-}
+	/* Surfaces */
+	--parchment: #f5f4ed;
+	--ivory: #faf9f5;
+	--warm-sand: #e8e6dc;
+	--deep-dark: #141413;
 
-/* 暗色主题 */
-.dark {
-	--bg: #0a0a0a;
-	--bg-elevated: #171717;
-	--fg: #fafafa;
-	--fg-muted: #a3a3a3;
-	--border: #262626;
-	--accent: #60a5fa;
-	--accent-hover: #93c5fd;
-	--code-bg: #1a1a1a;
-	--prose-fg: #e5e5e5;
+	/* Brand — sole chromatic color */
+	--brand: #1b365d;
+	--brand-light: #2d5a8a;
+	--tag-bg: #e4ecf5;
+	--brand-tint: #eef2f7;
+
+	/* Text (warm grays) */
+	--near-black: #141413;
+	--dark-warm: #3d3d3a;
+	--olive: #504e49;
+	--stone: #6b6a64;
+
+	/* Borders */
+	--border: #e8e6dc;
+	--border-soft: #e5e3d8;
+
+	/* Mapped aliases used across components */
+	--bg: var(--parchment);
+	--bg-elevated: var(--ivory);
+	--surface-interactive: var(--warm-sand);
+	--fg: var(--near-black);
+	--fg-secondary: var(--dark-warm);
+	--fg-muted: var(--olive);
+	--fg-meta: var(--stone);
+	--accent: var(--brand);
+	--accent-hover: var(--brand-light);
+	--code-bg: var(--ivory);
+	--prose-fg: var(--dark-warm);
+
+	/* Depth */
+	--shadow-whisper: 0 4px 24px rgba(0, 0, 0, 0.05);
+	--shadow-ring: 0 0 0 1px var(--border);
 }
 
 html {
@@ -40,76 +62,148 @@ html {
 	color-scheme: light;
 }
 
-html.dark {
-	color-scheme: dark;
-}
-
 body {
-	font-family: var(--font-sans);
+	font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', Georgia, serif;
 	background-color: var(--bg);
 	color: var(--fg);
-	line-height: 1.7;
+	font-size: 16px;
+	line-height: 1.6;
+	letter-spacing: 0.35px;
 	min-height: 100vh;
 	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Shiki 双主题：跟随 .dark */
-html:not(.dark) .astro-code,
-html:not(.dark) .astro-code span {
-	color: var(--shiki-light) !important;
-	background-color: var(--shiki-light-bg) !important;
-	font-style: var(--shiki-light-font-style) !important;
-	font-weight: var(--shiki-light-font-weight) !important;
-	text-decoration: var(--shiki-light-text-decoration) !important;
+/* Utility: Kami primary / ghost buttons */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-family: inherit;
+	font-size: 0.875rem;
+	font-weight: 500;
+	letter-spacing: 0.4px;
+	padding: 0.5rem 1.125rem;
+	border-radius: 0.5rem;
+	text-decoration: none;
+	transition: background-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.15s;
+	cursor: pointer;
+	user-select: none;
 }
 
-html.dark .astro-code,
-html.dark .astro-code span {
-	color: var(--shiki-dark) !important;
-	background-color: var(--shiki-dark-bg) !important;
-	font-style: var(--shiki-dark-font-style) !important;
-	font-weight: var(--shiki-dark-font-weight) !important;
-	text-decoration: var(--shiki-dark-text-decoration) !important;
+.btn-primary {
+	background: var(--brand);
+	color: var(--ivory);
+	box-shadow: 0 0 0 1px var(--brand);
 }
 
-/* 文章正文 */
+.btn-primary:hover {
+	background: var(--brand-light);
+	box-shadow: 0 0 0 1px var(--brand-light);
+	transform: translateY(-1px);
+}
+
+.btn-ghost {
+	background: transparent;
+	color: var(--brand);
+	box-shadow: 0 0 0 1px var(--brand);
+}
+
+.btn-ghost:hover {
+	background: var(--brand-tint);
+	transform: translateY(-1px);
+}
+
+/* Solid tag chips — never rgba */
+.tag {
+	display: inline-block;
+	font-size: 0.75rem;
+	font-weight: 500;
+	padding: 0.125rem 0.5rem;
+	border-radius: 0.25rem;
+	color: var(--brand);
+	background: var(--tag-bg);
+	letter-spacing: 0.3px;
+	text-decoration: none;
+	line-height: 1.4;
+	transition: background-color 0.15s, color 0.15s;
+}
+
+.tag:hover {
+	background: var(--brand-tint);
+	color: var(--brand-light);
+}
+
+.tag-soft {
+	background: var(--brand-tint);
+}
+
+/* Article prose */
 .prose {
 	--tw-prose-body: var(--prose-fg);
 	--tw-prose-headings: var(--fg);
 	--tw-prose-links: var(--accent);
 	--tw-prose-bold: var(--fg);
 	--tw-prose-counters: var(--fg-muted);
-	--tw-prose-bullets: var(--fg-muted);
-	--tw-prose-hr: var(--border);
-	--tw-prose-quotes: var(--fg-muted);
+	--tw-prose-bullets: var(--accent);
+	--tw-prose-hr: var(--border-soft);
+	--tw-prose-quotes: var(--olive);
 	--tw-prose-quote-borders: var(--accent);
-	--tw-prose-captions: var(--fg-muted);
+	--tw-prose-captions: var(--stone);
 	--tw-prose-code: var(--fg);
 	--tw-prose-pre-code: var(--fg);
 	--tw-prose-pre-bg: var(--code-bg);
 	--tw-prose-th-borders: var(--border);
-	--tw-prose-td-borders: var(--border);
+	--tw-prose-td-borders: var(--border-soft);
+	--tw-prose-lead: var(--olive);
+}
+
+.prose :where(h1, h2, h3, h4):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	font-weight: 500;
+	letter-spacing: 0;
+	color: var(--fg);
+}
+
+.prose :where(strong):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	font-weight: 500;
 }
 
 .prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-	text-decoration: underline;
-	text-underline-offset: 3px;
+	color: var(--accent);
+	text-decoration: none;
 	font-weight: 500;
 }
 
 .prose :where(a):hover {
 	color: var(--accent-hover);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.prose :where(blockquote):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	border-left: 2px solid var(--brand);
+	padding: 0.25rem 0 0.25rem 0.875rem;
+	color: var(--olive);
+	font-style: normal;
+	quotes: none;
+}
+
+.prose :where(blockquote p:first-of-type):not(:where([class~='not-prose'], [class~='not-prose'] *))::before,
+.prose :where(blockquote p:last-of-type):not(:where([class~='not-prose'], [class~='not-prose'] *))::after {
+	content: none;
 }
 
 .prose :where(pre):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-	border: 1px solid var(--border);
-	border-radius: 0.75rem;
+	background-color: var(--ivory);
+	border: 1px solid var(--border-soft);
+	border-radius: 0.5rem;
 }
 
 .prose :where(code):not(:where(pre *)):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-	background-color: var(--code-bg);
-	padding: 0.15em 0.4em;
-	border-radius: 0.25rem;
+	background-color: var(--brand-tint);
+	color: var(--brand);
+	padding: 0.1em 0.35em;
+	border-radius: 0.2rem;
 	font-size: 0.875em;
 	font-weight: 500;
 }
@@ -120,24 +214,38 @@ html.dark .astro-code span {
 }
 
 .prose :where(img):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-	border-radius: 0.75rem;
+	border-radius: 0.5rem;
 }
 
-/* 锚点偏移（固定顶栏） */
+.prose :where(hr):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	border-color: var(--border-soft);
+}
+
+.prose :where(li)::marker {
+	color: var(--brand);
+}
+
+/* Anchor offset for sticky header */
 .prose :where(h2, h3, h4) {
 	scroll-margin-top: 5rem;
 }
 
-/* Pagefind 主题适配 */
+/* Shiki light only */
+.astro-code,
+.astro-code span {
+	font-style: inherit;
+}
+
+/* Pagefind theme */
 .pagefind-ui {
 	--pagefind-ui-primary: var(--accent);
 	--pagefind-ui-text: var(--fg);
 	--pagefind-ui-background: var(--bg-elevated);
 	--pagefind-ui-border: var(--border);
-	--pagefind-ui-tag: var(--code-bg);
+	--pagefind-ui-tag: var(--tag-bg);
 	--pagefind-ui-border-width: 1px;
-	--pagefind-ui-border-radius: 0.75rem;
-	--pagefind-ui-font: var(--font-sans);
+	--pagefind-ui-border-radius: 0.5rem;
+	--pagefind-ui-font: 'Noto Serif SC', 'Songti SC', Georgia, serif;
 }
 
 .sr-only {

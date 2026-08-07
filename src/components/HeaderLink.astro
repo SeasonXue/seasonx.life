@@ -15,10 +15,8 @@ const isActive =
 <a
 	href={href}
 	class:list={[
-		'px-2 py-1 text-sm font-medium transition-colors rounded-md',
-		isActive
-			? 'text-[var(--accent)]'
-			: 'text-[var(--fg-muted)] hover:text-[var(--fg)]',
+		'px-2.5 py-1 text-sm font-medium transition-colors rounded-md no-underline',
+		isActive ? 'text-[var(--accent)]' : 'text-[var(--stone)] hover:text-[var(--brand)]',
 		className,
 	]}
 	{...props}

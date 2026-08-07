@@ -10,26 +10,26 @@ const byYear = groupPostsByYear(posts);
 
 <BaseLayout title="归档" description={`${SITE_TITLE} 文章归档`}>
 	<header class="mb-10">
-		<h1 class="text-3xl font-bold tracking-tight text-[var(--fg)]">归档</h1>
-		<p class="mt-2 text-[var(--fg-muted)]">按时间浏览全部 {posts.length} 篇文章</p>
+		<h1 class="text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">归档</h1>
+		<p class="mt-2 text-[var(--olive)]">按时间浏览全部 {posts.length} 篇文章</p>
 	</header>
 
 	{
 		[...byYear.entries()].map(([year, yearPosts]) => (
 			<section class="mb-10">
-				<h2 class="mb-4 text-xl font-bold text-[var(--fg)] border-b border-[var(--border)] pb-2">
+				<h2 class="mb-4 border-b border-[var(--border-soft)] pb-2 text-xl font-medium text-[var(--fg)]">
 					{year}
-					<span class="ml-2 text-sm font-normal text-[var(--fg-muted)]">({yearPosts.length})</span>
+					<span class="ml-2 text-sm font-normal text-[var(--stone)]">({yearPosts.length})</span>
 				</h2>
 				<ul class="space-y-3">
 					{yearPosts.map((post) => (
 						<li class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
-							<span class="shrink-0 text-sm text-[var(--fg-muted)] tabular-nums w-28">
+							<span class="w-28 shrink-0 text-sm tabular-nums text-[var(--stone)]">
 								<FormattedDate date={post.data.pubDate} />
 							</span>
 							<a
 								href={`/blog/${post.id}/`}
-								class="font-medium text-[var(--fg)] no-underline hover:text-[var(--accent)] transition-colors"
+								class="font-medium text-[var(--fg)] no-underline transition-colors hover:text-[var(--accent)]"
 							>
 								{post.data.title}
 							</a>

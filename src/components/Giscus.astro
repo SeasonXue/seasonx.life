@@ -6,8 +6,8 @@ const enabled = Boolean(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
 
 {
 	enabled && (
-		<section class="mt-12 border-t border-[var(--border)] pt-10" aria-label="评论">
-			<h2 class="mb-6 text-xl font-bold text-[var(--fg)]">评论</h2>
+		<section class="mt-12 border-t border-[var(--border-soft)] pt-10" aria-label="评论">
+			<h2 class="mb-6 text-xl font-medium text-[var(--fg)]">评论</h2>
 			<script
 				src="https://giscus.app/client.js"
 				data-repo={GISCUS.repo}
@@ -19,7 +19,7 @@ const enabled = Boolean(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
 				data-reactions-enabled={GISCUS.reactionsEnabled}
 				data-emit-metadata={GISCUS.emitMetadata}
 				data-input-position={GISCUS.inputPosition}
-				data-theme="preferred_color_scheme"
+				data-theme="light"
 				data-lang={GISCUS.lang}
 				data-loading={GISCUS.loading}
 				crossorigin="anonymous"

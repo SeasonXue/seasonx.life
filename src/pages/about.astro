@@ -4,7 +4,7 @@ import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
 <BaseLayout title="关于" description={`关于 ${SITE_AUTHOR}`}>
-	<article class="prose prose-lg max-w-none dark:prose-invert">
+	<article class="prose prose-lg max-w-none">
 		<h1>关于</h1>
 		<p>
 			你好，我是 <strong>{SITE_AUTHOR}</strong>。{SITE_DESCRIPTION}
@@ -16,7 +16,7 @@ import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<h2>技术栈</h2>
 		<ul>
 			<li>框架：Astro（全静态 SSG）</li>
-			<li>样式：Tailwind CSS</li>
+			<li>样式：Tailwind CSS · Kami 视觉语言</li>
 			<li>搜索：Pagefind</li>
 			<li>评论：Giscus（GitHub Discussions）</li>
 			<li>部署：Cloudflare Pages</li>
@@ -24,7 +24,7 @@ import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<p>
 			欢迎通过导航栏的文章、归档与标签探索内容。站点仓库与配置说明见项目 README。
 		</p>
-		<p class="text-[var(--fg-muted)] text-base not-prose">
+		<p class="text-[var(--stone)] text-base not-prose">
 			站点名：{SITE_TITLE}
 		</p>
 	</article>

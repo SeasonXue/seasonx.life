@@ -3,7 +3,6 @@ import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
 import FallbackImage from '../assets/blog-placeholder-1.jpg';
 import { CF_ANALYTICS_TOKEN, SITE_AUTHOR, SITE_TITLE, SITE_URL } from '../consts';
-import { Font } from 'astro:assets';
 
 interface Props {
 	title: string;
@@ -76,20 +75,15 @@ const jsonLd =
 />
 <meta name="generator" content={Astro.generator} />
 <meta name="author" content={SITE_AUTHOR} />
+<meta name="color-scheme" content="light" />
+<meta name="theme-color" content="#f5f4ed" />
 
-{/* 防止暗黑模式闪烁 */}
-<script is:inline>
-	(function () {
-		const key = 'theme';
-		const stored = localStorage.getItem(key);
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-		const theme = stored === 'light' || stored === 'dark' ? stored : prefersDark ? 'dark' : 'light';
-		if (theme === 'dark') document.documentElement.classList.add('dark');
-		else document.documentElement.classList.remove('dark');
-	})();
-</script>
-
-<Font cssVariable="--font-atkinson" preload />
+{/* Noto Serif SC ≈ Source Han Serif SC (OFL); bunny CDN 自托管，构建不依赖 Google */}
+<link rel="preconnect" href="https://fonts.bunny.net" crossorigin />
+<link
+	href="https://fonts.bunny.net/css?family=noto-serif-sc:400,500&display=swap"
+	rel="stylesheet"
+/>
 
 <link rel="canonical" href={canonicalURL} />
 

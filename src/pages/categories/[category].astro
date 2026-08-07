@@ -18,15 +18,17 @@ const posts = getPostsByCategory(await getPublishedPosts(), category);
 
 <BaseLayout title={`分类：${category}`} description={`分类「${category}」下的文章`}>
 	<header class="mb-8">
-		<p class="text-sm text-[var(--fg-muted)]">
+		<p class="text-sm text-[var(--stone)]">
 			<a href="/categories" class="text-[var(--accent)] no-underline hover:underline">分类</a>
 			<span class="mx-1">/</span>
 		</p>
-		<h1 class="mt-1 text-3xl font-bold tracking-tight text-[var(--fg)]">{category}</h1>
-		<p class="mt-2 text-[var(--fg-muted)]">{posts.length} 篇文章</p>
+		<h1 class="mt-1 text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">
+			{category}
+		</h1>
+		<p class="mt-2 text-[var(--olive)]">{posts.length} 篇文章</p>
 	</header>
 
-	<div class="grid gap-6 sm:grid-cols-2">
+	<div class="grid gap-5 sm:grid-cols-2">
 		{posts.map((post) => <PostCard post={post} />)}
 	</div>
 </BaseLayout>

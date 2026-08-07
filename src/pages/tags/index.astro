@@ -10,25 +10,25 @@ const max = Math.max(...tags.values(), 1);
 
 <BaseLayout title="标签" description={`${SITE_TITLE} 全部标签`}>
 	<header class="mb-10">
-		<h1 class="text-3xl font-bold tracking-tight text-[var(--fg)]">标签</h1>
-		<p class="mt-2 text-[var(--fg-muted)]">共 {tags.size} 个标签</p>
+		<h1 class="text-[1.75rem] font-medium tracking-tight text-[var(--fg)] sm:text-[2rem]">标签</h1>
+		<p class="mt-2 text-[var(--olive)]">共 {tags.size} 个标签</p>
 	</header>
 
 	{
 		tags.size === 0 ? (
-			<p class="text-[var(--fg-muted)]">暂无标签。</p>
+			<p class="text-[var(--olive)]">暂无标签。</p>
 		) : (
-			<div class="flex flex-wrap gap-3">
+			<div class="flex flex-wrap gap-2.5">
 				{[...tags.entries()].map(([tag, count]) => {
 					const scale = 0.85 + (count / max) * 0.4;
 					return (
 						<a
 							href={`/tags/${encodeURIComponent(tag)}/`}
-							class="inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--bg-elevated)] px-4 py-2 no-underline transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+							class="tag inline-flex items-center gap-2 px-3 py-1.5 no-underline transition-shadow hover:shadow-[var(--shadow-whisper)]"
 							style={`font-size: ${scale}rem`}
 						>
 							<span class="font-medium">#{tag}</span>
-							<span class="text-xs text-[var(--fg-muted)]">{count}</span>
+							<span class="text-xs opacity-70">{count}</span>
 						</a>
 					);
 				})}
