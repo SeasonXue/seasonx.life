@@ -56,7 +56,9 @@ pnpm check    # 类型与 Astro 检查
 ## 项目结构
 
 ```text
-├── public/                 # 静态资源、robots.txt
+├── docs/
+│   └── brand.md            # 品牌与 logo 风格（改视觉前必读）
+├── public/                 # 静态资源、logo、favicon、robots.txt
 ├── src/
 │   ├── assets/             # 图片、字体
 │   ├── components/         # Header、PostCard、TOC、Giscus 等
@@ -70,6 +72,8 @@ pnpm check    # 类型与 Astro 检查
 ├── astro.config.mjs
 └── package.json
 ```
+
+品牌色、狐狸线稿变体、favicon 规则见 **[docs/brand.md](docs/brand.md)**。
 
 ## 写文章
 

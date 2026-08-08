@@ -277,8 +277,9 @@
 /* spacing unit ≈ 4px */
 .article-content {
 	margin-top: 2.5rem; /* 10 */
-	font-size: 16px;
-	line-height: 1.75; /* ~28px */
+	/* Kami reading rhythm: 14px body, 1.55–1.65 line */
+	font-size: 14px;
+	line-height: 1.65;
 	color: var(--dark-warm);
 	letter-spacing: 0.35px;
 }
@@ -345,7 +346,7 @@
 	margin: 2rem 0;
 	border-inline-start: 2px solid var(--brand);
 	padding-inline-start: 1.25rem;
-	font-size: 17px;
+	font-size: 15px;
 	color: var(--olive);
 	/* CF uses italic; keep light for editorial pull */
 	font-style: normal;

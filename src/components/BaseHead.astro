@@ -66,7 +66,8 @@ const jsonLd =
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
 	rel="alternate"
@@ -79,11 +80,20 @@ const jsonLd =
 <meta name="color-scheme" content="light" />
 <meta name="theme-color" content="#f5f4ed" />
 
-{/* Noto Serif SC ≈ Source Han Serif SC (OFL); bunny CDN 自托管，构建不依赖 Google */}
-<link rel="preconnect" href="https://fonts.bunny.net" crossorigin />
+{/* Kami fonts: 仓耳今楷 + JetBrains Mono，self-hosted under /fonts */}
 <link
-	href="https://fonts.bunny.net/css?family=noto-serif-sc:400,500&display=swap"
-	rel="stylesheet"
+	rel="preload"
+	href="/fonts/TsangerJinKai02.woff2"
+	as="font"
+	type="font/woff2"
+	crossorigin
+/>
+<link
+	rel="preload"
+	href="/fonts/JetBrainsMono.woff2"
+	as="font"
+	type="font/woff2"
+	crossorigin
 />
 
 <link rel="canonical" href={canonicalURL} />

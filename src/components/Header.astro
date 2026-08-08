@@ -19,9 +19,18 @@ const links = [
 	<div class="page-frame flex h-full items-center justify-between gap-4 px-[var(--page-pad-x)]">
 		<a
 			href="/"
-			class="shrink-0 text-base font-medium tracking-tight text-[var(--fg)] no-underline transition-colors duration-150 hover:text-[var(--accent)]"
+			class="group flex shrink-0 items-center gap-2 text-base font-medium tracking-tight text-[var(--fg)] no-underline transition-colors duration-150 hover:text-[var(--accent)]"
+			aria-label={SITE_TITLE}
 		>
-			{SITE_TITLE}
+			<img
+				src="/logo-fox.png"
+				alt=""
+				width="32"
+				height="32"
+				class="h-8 w-8 shrink-0 object-contain opacity-90 transition-opacity duration-150 group-hover:opacity-100"
+				decoding="async"
+			/>
+			<span>{SITE_TITLE}</span>
 		</a>
 
 		<nav class="hidden items-center gap-0.5 md:flex" aria-label="主导航">

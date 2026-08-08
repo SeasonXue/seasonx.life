@@ -144,7 +144,7 @@
 	text-transform: uppercase;
 	color: var(--stone);
 	font-variant-numeric: tabular-nums;
-	font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+	font-family: var(--font-mono), ui-monospace, monospace;
 }
 
 /* —— Featured post (full-width row) —— */
@@ -321,7 +321,7 @@
 .feed-cell__excerpt {
 	margin: 0;
 	font-size: 1rem;
-	line-height: 1.75; /* leading-7 */
+	line-height: 1.55;
 	color: var(--olive);
 }
 

@@ -5,12 +5,32 @@
  * Kami design tokens → blog surface
  * Warm parchment, single ink-blue accent, one serif for the page.
  * https://github.com/tw93/kami
+ *
+ * Typography (zh-CN): TsangerJinKai02 仓耳今楷 + JetBrains Mono
+ * 一页一字体 — sans 与 serif 同源。
  */
 
+@font-face {
+	font-family: 'TsangerJinKai02';
+	src: url('/fonts/TsangerJinKai02.woff2') format('woff2');
+	font-weight: 400 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('/fonts/JetBrainsMono.woff2') format('woff2');
+	font-weight: 400 500;
+	font-style: normal;
+	font-display: swap;
+}
+
 @theme {
-	--font-sans: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', Georgia, serif;
-	--font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', Georgia, serif;
-	--font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, Monaco, 'Noto Serif SC', monospace;
+	/* Kami zh stack: 仓耳今楷 first, system Songti as fallback */
+	--font-serif: 'TsangerJinKai02', 'Source Han Serif SC', 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+	--font-sans: 'TsangerJinKai02', 'Source Han Serif SC', 'Noto Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+	--font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, Monaco, monospace;
 
 	--color-accent: #1b365d;
 	--color-accent-hover: #2d5a8a;
@@ -80,11 +100,12 @@ html {
 }
 
 body {
-	font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'STSong', Georgia, serif;
+	font-family: var(--font-serif);
 	background-color: var(--bg);
 	color: var(--fg);
-	font-size: 16px;
-	line-height: 1.6;
+	/* Kami zh body: 14px / 1.55 / 0.35px */
+	font-size: 14px;
+	line-height: 1.55;
 	letter-spacing: 0.35px;
 	min-height: 100vh;
 	-webkit-font-smoothing: antialiased;
@@ -137,7 +158,7 @@ body {
 	text-transform: uppercase;
 	color: var(--stone);
 	font-variant-numeric: tabular-nums;
-	font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+	font-family: var(--font-mono), ui-monospace, monospace;
 }
 
 /* Reading progress */
@@ -363,7 +384,7 @@ html.menu-open body {
 	--pagefind-ui-tag: var(--tag-bg);
 	--pagefind-ui-border-width: 1px;
 	--pagefind-ui-border-radius: 0.5rem;
-	--pagefind-ui-font: 'Noto Serif SC', 'Songti SC', Georgia, serif;
+	--pagefind-ui-font: 'TsangerJinKai02', 'Songti SC', Georgia, serif;
 }
 
 .sr-only {
