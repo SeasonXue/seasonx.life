@@ -7,7 +7,8 @@
 - 全静态 SSG（无服务端运行时）
 - Content Collections 管理 Markdown / MDX
 - Tailwind CSS + 暗黑模式
-- 文章列表 / 详情 / 归档 / 标签 / 分类
+- 文章列表 / 详情 / 标签 / 分类
+- 照片墙（Live Photo，`pnpm live:import` 导入）
 - 封面图、摘要、阅读时间、目录（TOC）
 - 代码高亮（Shiki 双主题）
 - Pagefind 静态全文搜索
@@ -72,6 +73,30 @@ pnpm check    # 类型与 Astro 检查
 
 ## 写文章
 
+### 快速创建（推荐）
+
+```bash
+pnpm new:post "文章标题"
+pnpm new:post "Astro Tips" --slug astro-tips --tags astro,教程 --category 技术 --publish
+pnpm new:post "实验" --mdx --draft
+```
+
+会在 `src/content/blog/` 生成 `YYYY-MM-DD-slug.md`（默认 `draft: true`）。
+
+| 选项 | 说明 |
+|------|------|
+| `--slug <name>` | 文件名 slug（默认从标题生成） |
+| `--description <text>` | 摘要 |
+| `--date <YYYY-MM-DD>` | 发布日期（默认今天） |
+| `--tags a,b` | 标签 |
+| `--category <name>` | 分类 |
+| `--draft` / `--publish` | 草稿（默认）/ 正式发布 |
+| `--mdx` | 生成 `.mdx` |
+| `--force` | 覆盖已存在文件 |
+| `--dry-run` | 只打印不写入 |
+
+### 手动创建
+
 在 `src/content/blog/` 新建 `.md` 或 `.mdx` 文件：
 
 ```markdown
@@ -103,6 +128,57 @@ draft: false                  # true 时生产构建不输出
 | `draft` | boolean | 草稿，默认 `false` |
 
 封面图可放在 `src/assets/`，通过 `astro:assets` 自动优化。
+
+### Live Photo（实况图）
+
+浏览器无法直接播 iPhone 原片。本站约定：**本地脚本导入 → 生成资源 + meta → 组件引用 meta**。
+
+完整规范见 [`docs/live-photo.md`](./docs/live-photo.md)。
+
+#### 1. 准备源文件
+
+隔空投送后需成对存在（同主文件名）：
+
+- `IMG_xxxx.HEIC`（静图）
+- `IMG_xxxx.MOV`（动效 + 环境声）
+
+#### 2. 导入
+
+```bash
+pnpm live:import ~/Downloads/IMG_8279.HEIC
+# 默认按拍摄时间命名，例如 2025-04-18-181243
+# 或
+pnpm live:import ~/Downloads/IMG_8279.HEIC ~/Downloads/IMG_8279.MOV \
+  --alt "Sunset over the ocean and volcano" \
+  --force
+```
+
+生成：
+
+```text
+public/images/live/<slug>/photo.jpg   # slug 默认 = YYYY-MM-DD-HHmmss
+public/images/live/<slug>/video.mp4
+src/data/live/<slug>.json             # 页面 import
+```
+
+- 默认 `--slug-from time`（拍摄时间）；`--slug-from name` 用源文件名；`--slug foo` 自定义  
+- 转码 JPEG + H.264/AAC、提取 GPS、可选 OSM 反查地名（**原文，不翻译**）
+
+#### 3. 在页面 / MDX 中引用
+
+```astro
+---
+import LivePhoto from '../../components/LivePhoto.astro';
+import { getLive } from '../../utils/live-photo';
+
+const live = getLive('2025-04-18-181243');
+---
+
+<LivePhoto meta={live} />
+<!-- 可覆盖：alt / caption / sound 等 -->
+```
+
+交互：悬停预览（常被浏览器静音）；**点击 / 长按 / LIVE** 有声播放。
 
 ## 站点配置
 
@@ -193,6 +269,8 @@ Worker → **Settings → Domains & Routes** → 添加 `seasonx.life`（域名�
 
 若以后引入新的第三方脚本 / iframe，需同步更新 `public/_headers` 中的 `Content-Security-Policy`。
 
+`media-src` 已允许同源与 `https:` 视频（含 Live Photo 的 MP4；若视频放在 R2 自定义域名也可加载）。
+
 ### CI
 
 工作流：`.github/workflows/ci.yml`
@@ -218,6 +296,7 @@ Pagefind 在 `pnpm build` 之后索引 `dist/`。开发模式（`pnpm dev`）下
 | `pnpm check` | Astro / TypeScript 检查 |
 | `pnpm cf:dev` | 构建后用 Wrangler 本地预览 |
 | `pnpm cf:deploy` | 构建并部署到 Cloudflare Workers |
+| `pnpm live:import <still> [mov]` | 导入 Live Photo → `public/images/live` + `src/data/live` |
 
 ## 许可
 

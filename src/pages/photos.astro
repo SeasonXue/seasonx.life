@@ -1,0 +1,45 @@
+---
+import LivePhoto from '../components/LivePhoto.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
+import { listLive } from '../utils/live-photo';
+
+const photos = listLive({ order: 'desc' });
+---
+
+<BaseLayout title="照片墙" description={`${SITE_TITLE} 照片墙 · Live Photo`}>
+	<div class="feed-band feed-band--connectors">
+		<div class="feed-frame feed-frame--rails">
+			<header class="feed-pad">
+				<h1 class="feed-page-title">照片墙</h1>
+				<p class="feed-page-description">
+					{photos.length === 0 ? '暂无照片' : `共 ${photos.length} 张 Live Photo`}
+				</p>
+			</header>
+		</div>
+	</div>
+
+	<div class="feed-band">
+		<div class="feed-frame feed-frame--rails">
+			<div class="feed-pad">
+				{
+					photos.length === 0 ? (
+						<p class="feed-empty">
+							还没有导入照片。在本地执行
+							<code class="mx-1 rounded bg-[var(--ivory)] px-1.5 py-0.5 text-sm">pnpm live:import …</code>
+							后会自动出现在这里。
+						</p>
+					) : (
+						<ul class="photo-wall m-0 grid list-none grid-cols-1 gap-8 p-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7">
+							{photos.map((meta) => (
+								<li class="photo-wall__item min-w-0">
+									<LivePhoto meta={meta} variant="wall" />
+								</li>
+							))}
+						</ul>
+					)
+				}
+			</div>
+		</div>
+	</div>
+</BaseLayout>

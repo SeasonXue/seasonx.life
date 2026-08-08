@@ -1,6 +1,10 @@
 ---
+import LivePhoto from '../components/LivePhoto.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getLive } from '../utils/live-photo';
+
+const liveSunset = getLive('2025-04-18-181243');
 ---
 
 <BaseLayout title="关于" description={`关于 ${SITE_AUTHOR}`}>
@@ -18,9 +22,6 @@ import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			</p>
 			<p>
 				文章以 Markdown 撰写，站点基于 Astro 构建，部署于 Cloudflare Workers。
-			</p>
-			<p class="text-[var(--stone)] text-base not-prose">
-				{SITE_TITLE} · {SITE_DESCRIPTION}
 			</p>
 		</article>
 	</div>

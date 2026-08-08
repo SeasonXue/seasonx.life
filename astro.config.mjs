@@ -12,6 +12,10 @@ export default defineConfig({
 	vite: {
 		plugins: [tailwindcss()],
 	},
+	// 旧「归档」路径 → 照片墙
+	redirects: {
+		'/archive': '/photos',
+	},
 	markdown: {
 		shikiConfig: {
 			theme: 'min-light',

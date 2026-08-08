@@ -1,0 +1,58 @@
+{
+	"slug": "2025-04-18-181243",
+	"photo": "/images/live/2025-04-18-181243/photo.jpg",
+	"video": "/images/live/2025-04-18-181243/video.mp4",
+	"width": 1600,
+	"height": 1200,
+	"duration": 3.009002,
+	"hasAudio": true,
+	"alt": "Sunset over the ocean and volcano",
+	"caption": "Live Photo · hover to preview; click / long-press for sound",
+	"source": {
+		"still": "IMG_8279.HEIC",
+		"video": "IMG_8279.MOV",
+		"device": "iPhone 15 Pro Max",
+		"make": "Apple",
+		"software": "18.3.2",
+		"capturedAt": "2025-04-18T18:12:43+0800",
+		"capturedAtUtc": "2025-04-18 10:12:44 +0000",
+		"contentId": "6C651AD1-18B8-424F-9AC6-40F9FDD55656"
+	},
+	"gps": {
+		"latitude": -8.481803333333334,
+		"longitude": 116.0368945,
+		"altitude": 2.014260474507824,
+		"horizontalAccuracy": 4.288703,
+		"imageDirection": 281.3195342820181,
+		"iso6709": "-08.4818+116.0369+002.014/"
+	},
+	"place": {
+		"name": "Senggigi",
+		"region": "Lombok Barat",
+		"state": "Nusa Tenggara Barat",
+		"country": "Indonesia",
+		"countryCode": "ID",
+		"road": "Jalan Raya Sengigi",
+		"label": "Alang - Alang Boutique Beach Resort, Senggigi, Lombok Barat, Nusa Tenggara Barat, Indonesia",
+		"displayName": "Alang - Alang Boutique Beach Resort, Jalan Raya Sengigi, Dusun Kerandangan, Senggigi, Lombok Barat, Nusa Tenggara Barat, 83355, Indonesia",
+		"address": {
+			"tourism": "Alang - Alang Boutique Beach Resort",
+			"road": "Jalan Raya Sengigi",
+			"hamlet": "Dusun Kerandangan",
+			"village": "Senggigi",
+			"county": "Lombok Barat",
+			"state": "Nusa Tenggara Barat",
+			"ISO3166-2-lvl4": "ID-NB",
+			"postcode": "83355",
+			"country": "Indonesia",
+			"country_code": "id"
+		}
+	},
+	"maps": {
+		"apple": "https://maps.apple.com/?ll=-8.481803333333334,116.0368945&q=Alang%20-%20Alang%20Boutique%20Beach%20Resort%2C%20Senggigi%2C%20Lombok%20Barat%2C%20Nusa%20Tenggara%20Barat%2C%20Indonesia",
+		"google": "https://www.google.com/maps?q=-8.481803333333334,116.0368945",
+		"osm": "https://www.openstreetmap.org/?mlat=-8.481803333333334&mlon=116.0368945#map=15/-8.481803333333334/116.0368945"
+	},
+	"importedAt": "2026-08-08T05:37:38.246Z",
+	"id": "live/2025-04-18-181243"
+}

@@ -1,0 +1,57 @@
+{
+	"id": "live/2026-03-30-094329",
+	"slug": "2026-03-30-094329",
+	"photo": "/images/live/2026-03-30-094329/photo.jpg",
+	"video": "/images/live/2026-03-30-094329/video.mp4",
+	"width": 1600,
+	"height": 1200,
+	"duration": 2.967,
+	"hasAudio": true,
+	"alt": "阿里巴巴西溪园区的樱花",
+	"caption": null,
+	"source": {
+		"still": "IMG_0258.HEIC",
+		"video": "IMG_0258.MOV",
+		"device": "iPhone 15 Pro Max",
+		"make": "Apple",
+		"software": "26.3.1",
+		"capturedAt": "2026-03-30T09:43:29+0800",
+		"capturedAtUtc": "2026-03-30 01:43:29 +0000",
+		"contentId": "BE7A20D5-3FD0-42E3-BEEF-F1BBC0FDCC5F"
+	},
+	"gps": {
+		"latitude": 30.28188666666667,
+		"longitude": 120.0230416666667,
+		"altitude": 6.663208502024291,
+		"horizontalAccuracy": 9.208106,
+		"imageDirection": 341.8681790312692,
+		"iso6709": "+30.2819+120.0230+006.663/"
+	},
+	"place": {
+		"name": "余杭区",
+		"region": null,
+		"state": "浙江省",
+		"country": "中国",
+		"countryCode": "CN",
+		"road": "爱橙街",
+		"label": "余杭区, 浙江省, 中国",
+		"displayName": "Costa咖啡, 爱橙街, 五常街道, 余杭区, 杭州市, 浙江省, 311121, 中国",
+		"address": {
+			"amenity": "Costa咖啡",
+			"road": "爱橙街",
+			"suburb": "五常街道",
+			"city": "余杭区",
+			"state": "浙江省",
+			"ISO3166-2-lvl4": "CN-ZJ",
+			"postcode": "311121",
+			"country": "中国",
+			"country_code": "cn"
+		}
+	},
+	"maps": {
+		"apple": "https://maps.apple.com/?ll=30.28188666666667,120.0230416666667&q=%E4%BD%99%E6%9D%AD%E5%8C%BA%2C%20%E6%B5%99%E6%B1%9F%E7%9C%81%2C%20%E4%B8%AD%E5%9B%BD",
+		"google": "https://www.google.com/maps?q=30.28188666666667,120.0230416666667",
+		"osm": "https://www.openstreetmap.org/?mlat=30.28188666666667&mlon=120.0230416666667#map=15/30.28188666666667/120.0230416666667"
+	},
+	"importedAt": "2026-08-08T05:55:31.942Z"
+}
