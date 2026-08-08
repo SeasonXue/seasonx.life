@@ -8,9 +8,9 @@ export const SITE_LANG = 'zh-CN';
 
 /** 社交链接（留空则不显示对应图标） */
 export const SOCIAL_LINKS = {
-	github: 'https://github.com/seasonx',
-	twitter: '',
-	email: '',
+	github: 'https://github.com/SeasonXue',
+	twitter: 'https://x.com/xue_season',
+	email: 'imseasonx@gmail.com',
 } as const;
 
 /**
