@@ -302,8 +302,8 @@
 /* spacing unit ≈ 4px */
 .article-content {
 	margin-top: 2.5rem; /* 10 */
-	/* Kami reading rhythm: 14px body, 1.55–1.65 line */
-	font-size: 14px;
+	/* Reading rhythm: 16px body, 1.55–1.65 line */
+	font-size: 16px;
 	line-height: 1.65;
 	color: var(--dark-warm);
 	letter-spacing: 0.35px;
@@ -484,29 +484,43 @@
 	box-decoration-break: clone;
 }
 
+/* Keep real table layout so columns fill width.
+   Surfaces stay in parchment family — avoid cold ivory “white bar” headers. */
 .article-content table {
 	margin: 2rem 0;
 	border-collapse: collapse;
-	border: 1px solid var(--border);
+	border: 1px solid var(--border-soft);
 	width: 100%;
+	max-width: 100%;
 	font-size: 0.875rem;
 	line-height: 1.5;
-	display: block;
-	overflow-x: auto;
+	table-layout: fixed;
+	background: transparent;
+	color: var(--dark-warm);
 }
 
 .article-content th,
 .article-content td {
-	border: 1px solid var(--border);
-	padding: 0.5rem 0.75rem;
+	border: 1px solid var(--border-soft);
+	padding: 0.55rem 0.85rem;
 	vertical-align: top;
 	text-align: start;
+	word-break: break-word;
 }
 
 .article-content th {
-	background: var(--ivory);
+	/* warm sand, not ivory — same family as page bg */
+	background: var(--warm-sand);
 	font-weight: 500;
-	color: var(--fg);
+	color: var(--olive);
+}
+
+.article-content td {
+	background: color-mix(in srgb, var(--warm-sand) 28%, transparent);
+}
+
+.article-content tbody tr:nth-child(even) td {
+	background: color-mix(in srgb, var(--warm-sand) 48%, transparent);
 }
 
 /* Shiki inside article */
