@@ -10,6 +10,7 @@ export const SITE_LANG = 'zh-CN';
 export const SOCIAL_LINKS = {
 	github: 'https://github.com/SeasonXue',
 	twitter: 'https://x.com/xue_season',
+	jike: 'https://web.okjike.com/u/SeasonX',
 	email: 'imseasonx@gmail.com',
 } as const;
 

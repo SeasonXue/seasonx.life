@@ -5,8 +5,10 @@ import type { MarkdownHeading } from 'astro';
 import BackToTop from '../components/BackToTop.astro';
 import CopyUrl from '../components/CopyUrl.astro';
 import Giscus from '../components/Giscus.astro';
+import LivePhoto from '../components/LivePhoto.astro';
 import OnThisPage from '../components/OnThisPage.astro';
 import { SITE_AUTHOR } from '../consts';
+import { getLive } from '../utils/live-photo';
 import { getPublishedPosts, getRelatedPosts } from '../utils/posts';
 import { formatReadingTime, getReadingTime } from '../utils/reading-time';
 import BaseLayout from './BaseLayout.astro';
@@ -18,7 +20,10 @@ type Props = {
 };
 
 const { post, headings, body } = Astro.props;
-const { title, description, pubDate, updatedDate, heroImage, tags, category } = post.data;
+const { title, description, pubDate, updatedDate, heroImage, heroLive, tags, category } = post.data;
+const heroLiveMeta = heroLive ? getLive(heroLive) : undefined;
+/** OG / social: Live still URL preferred when heroLive is set */
+const socialImage = heroLiveMeta?.photo ?? heroImage;
 const minutes = getReadingTime(body);
 const related = getRelatedPosts(await getPublishedPosts(), post, 4);
 const tocItems = headings.filter((h) => h.depth === 2 || h.depth === 3);
@@ -32,7 +37,7 @@ const dateLabel = pubDate.toLocaleDateString('zh-CN', {
 <BaseLayout
 	title={title}
 	description={description}
-	image={heroImage}
+	image={socialImage}
 	type="article"
 	pubDate={pubDate}
 	updatedDate={updatedDate}
@@ -97,17 +102,23 @@ const dateLabel = pubDate.toLocaleDateString('zh-CN', {
 				</header>
 
 				{
-					heroImage && (
-						<div class="post-cover">
-							<Image
-								width={1400}
-								height={788}
-								src={heroImage}
-								alt={title}
-								class="h-auto w-full object-cover"
-								priority
-							/>
+					heroLiveMeta ? (
+						<div class="post-cover post-cover--live">
+							<LivePhoto meta={heroLiveMeta} alt={title} autoplayOnce loading="eager" />
 						</div>
+					) : (
+						heroImage && (
+							<div class="post-cover">
+								<Image
+									width={1400}
+									height={788}
+									src={heroImage}
+									alt={title}
+									class="h-auto w-full object-cover"
+									priority
+								/>
+							</div>
+						)
 					)
 				}
 

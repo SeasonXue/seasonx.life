@@ -1,28 +1,420 @@
 ---
 import LivePhoto from '../components/LivePhoto.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SOCIAL_LINKS } from '../consts';
 import { getLive } from '../utils/live-photo';
 
 const liveSunset = getLive('2025-04-18-181243');
+
+const interests = [
+	'AI 工程',
+	'前端',
+	'长期投资',
+	'魂类游戏',
+	'开放世界',
+	'旅行',
+	'低成本创业',
+];
 ---
 
-<BaseLayout title="关于" description={`关于 ${SITE_AUTHOR}`}>
-	<div class="section-rule">
-		<div class="page-frame page-pad">
-			<h1 class="page-title">关于</h1>
-			<p class="page-description">{SITE_DESCRIPTION}</p>
+<BaseLayout title="关于" description={`关于 ${SITE_AUTHOR} · ${SITE_DESCRIPTION}`}>
+	{/* —— 刊头 —— */}
+	<div class="feed-band feed-band--connectors">
+		<div class="feed-frame feed-frame--rails">
+			<header class="about-hero feed-pad">
+				<p class="about-kicker">About · {SITE_TITLE}</p>
+				<h1 class="about-title">关于</h1>
+				<p class="about-lead">
+					写技术，也写思考与生活。<br class="hidden sm:inline" />
+					这个世界这么大，互联网一隅你我产生交集是我的荣幸。
+				</p>
+			</header>
 		</div>
 	</div>
 
-	<div class="page-frame page-pad mx-auto max-w-[calc(var(--content-max)+var(--page-pad-x)*2)]">
-		<article class="prose prose-lg max-w-none">
-			<p>
-				你好，我是 <strong>{SITE_AUTHOR}</strong>。这里是我的个人博客，记录技术、思考与生活。
-			</p>
-			<p>
-				文章以 Markdown 撰写，站点基于 Astro 构建，部署于 Cloudflare Workers。
-			</p>
-		</article>
+	{/* —— 正文 + 侧栏视觉 —— */}
+	<div class="feed-band">
+		<div class="feed-frame feed-frame--rails">
+			<div class="about-layout feed-pad">
+				<article class="about-prose">
+					<p class="about-greeting">
+						你好，我是 <em>{SITE_AUTHOR}</em>。
+					</p>
+					<p>
+						这里是我的个人角落——不是产品手册，也不是履历表。
+						而是一本随手翻开的笔记本：关于代码与AI，关于旅行与旧事，有时只写一点生活上的碎念。
+					</p>
+
+					<section class="about-section" aria-labelledby="about-work">
+						<h2 id="about-work" class="about-section__label">
+							<span class="about-section__num" aria-hidden="true">01</span>
+							在路上
+						</h2>
+						<p>
+							2019 年加入阿里巴巴，至今仍在一线工作——也许正站在职业生涯的某个岔口。
+							互联网从业十余年，从前端工程师转为 AI 工程师；
+							业余时间则长期关注 TSLA 与美股大盘。投资于我，是另一种长期主义的浪漫。
+						</p>
+					</section>
+
+					<section class="about-section" aria-labelledby="about-place">
+						<h2 id="about-place" class="about-section__label">
+							<span class="about-section__num" aria-hidden="true">02</span>
+							杭州与远方
+						</h2>
+						<p>
+							生活在杭州，一个旅游资源丰富的城市，却总想往更远的地方走一走。
+							至今已经在日本、泰国、马来西亚、印度尼西亚四个国家留下足迹。
+						</p>
+					</section>
+
+					<section class="about-section" aria-labelledby="about-play">
+						<h2 id="about-play" class="about-section__label">
+							<span class="about-section__num" aria-hidden="true">03</span>
+							平行时空
+						</h2>
+						<p>
+							魂类与开放世界几乎构成了我的另一个平行时空——
+							艾尔登法环、只狼、黑魂、GTA、塞尔达传说……
+							在虚拟世界里反复倒下、再站起来。像极了步入中年的我。
+						</p>
+					</section>
+
+					<section class="about-section" aria-labelledby="about-venture">
+						<h2 id="about-venture" class="about-section__label">
+							<span class="about-section__num" aria-hidden="true">04</span>
+							奋斗中
+						</h2>
+						<p>
+							与大学同学一起做着低成本创业。野心适中，温饱尚可——这就够了。
+						</p>
+					</section>
+
+					<blockquote class="about-epigraph">
+						<p>希望把生活过得慢一点。把看见的写下来，把路过的记住。</p>
+					</blockquote>
+
+					{
+						interests.length > 0 && (
+							<div class="about-tags" aria-label="兴趣标签">
+								{interests.map((tag) => (
+									<span class="tag tag-soft">{tag}</span>
+								))}
+							</div>
+						)
+					}
+
+					{
+						(SOCIAL_LINKS.github ||
+							SOCIAL_LINKS.twitter ||
+							SOCIAL_LINKS.jike ||
+							SOCIAL_LINKS.email) && (
+							<p class="about-contact">
+								你可以通过以下社交媒体联系我：
+								{SOCIAL_LINKS.email && (
+									<>
+										<a href={`mailto:${SOCIAL_LINKS.email}`}>{SOCIAL_LINKS.email}</a>
+										{' · '}
+									</>
+								)}
+								{SOCIAL_LINKS.github && (
+									<>
+										<a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer">
+											GitHub
+										</a>
+										{(SOCIAL_LINKS.twitter || SOCIAL_LINKS.jike) && ' · '}
+									</>
+								)}
+								{SOCIAL_LINKS.twitter && (
+									<>
+										<a href={SOCIAL_LINKS.twitter} target="_blank" rel="noopener noreferrer">
+											X
+										</a>
+										{SOCIAL_LINKS.jike && ' · '}
+									</>
+								)}
+								{SOCIAL_LINKS.jike && (
+									<a href={SOCIAL_LINKS.jike} target="_blank" rel="noopener noreferrer">
+										即刻
+									</a>
+								)}
+							</p>
+						)
+					}
+				</article>
+
+				<aside class="about-aside" aria-label="视觉侧栏">
+					<figure class="about-mark">
+						<img
+							src="/logo-fox-sitting.png"
+							alt=""
+							width="280"
+							height="280"
+							class="about-mark__fox"
+							loading="eager"
+							decoding="async"
+						/>
+						<figcaption class="about-mark__caption">
+							<span class="about-mark__name">{SITE_AUTHOR}</span>
+							<span class="about-mark__domain">seasonx.life</span>
+						</figcaption>
+					</figure>
+
+					{
+						liveSunset && (
+							<div class="about-photo">
+								<LivePhoto
+									meta={liveSunset}
+									variant="default"
+									autoplayOnce
+									loading="lazy"
+									alt="日落 · 龙目岛 Senggigi 海边"
+								/>
+								<p class="about-photo__note">我在印尼看到了现实中的织梦岛</p>
+							</div>
+						)
+					}
+				</aside>
+			</div>
+		</div>
 	</div>
 </BaseLayout>
+
+<style>
+	/* —— 刊头 —— */
+	.about-hero {
+		padding-block: clamp(2.5rem, 6vw, 4rem);
+	}
+
+	.about-kicker {
+		margin: 0 0 0.75rem;
+		font-size: 0.75rem;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--stone);
+		font-family: var(--font-mono), ui-monospace, monospace;
+	}
+
+	.about-title {
+		margin: 0 0 1rem;
+		font-size: clamp(2.5rem, 6vw, 3.5rem);
+		font-weight: 500;
+		line-height: 1.1;
+		letter-spacing: -0.03em;
+		color: var(--fg);
+	}
+
+	.about-lead {
+		margin: 0;
+		max-width: 28rem;
+		font-size: 1.125rem;
+		line-height: 1.7;
+		color: var(--olive);
+	}
+
+	/* —— 双栏：正文 + 侧栏 —— */
+	.about-layout {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 2.5rem;
+		padding-block: clamp(2rem, 5vw, 3.5rem);
+	}
+
+	@media (min-width: 900px) {
+		.about-layout {
+			grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
+			gap: 3.5rem;
+			align-items: start;
+		}
+	}
+
+	/* —— 正文节奏 —— */
+	.about-prose {
+		min-width: 0;
+		max-width: 38rem;
+		font-size: 1.0625rem;
+		line-height: 1.85;
+		letter-spacing: 0.02em;
+		color: var(--dark-warm);
+	}
+
+	.about-prose > p {
+		margin: 0 0 1.35em;
+	}
+
+	.about-greeting {
+		font-size: 1.25rem;
+		line-height: 1.65;
+		color: var(--fg);
+	}
+
+	.about-greeting em {
+		font-style: normal;
+		font-weight: 500;
+		color: var(--brand);
+	}
+
+	.about-section {
+		margin: 0 0 2rem;
+		padding-top: 0.25rem;
+	}
+
+	.about-section__label {
+		display: flex;
+		align-items: baseline;
+		gap: 0.65rem;
+		margin: 0 0 0.75rem;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		letter-spacing: 0.12em;
+		text-transform: none;
+		color: var(--brand);
+	}
+
+	.about-section__num {
+		font-family: var(--font-mono), ui-monospace, monospace;
+		font-size: 0.7rem;
+		letter-spacing: 0.08em;
+		color: var(--stone);
+		font-weight: 400;
+	}
+
+	.about-section p {
+		margin: 0;
+	}
+
+	/* 尾注式引语 */
+	.about-epigraph {
+		margin: 2.5rem 0 2rem;
+		padding: 1.25rem 0 1.25rem 1.125rem;
+		border: none;
+		border-left: 2px solid var(--brand);
+		color: var(--olive);
+	}
+
+	.about-epigraph p {
+		margin: 0;
+		font-size: 1.0625rem;
+		line-height: 1.75;
+	}
+
+	.about-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin: 0 0 1.75rem;
+	}
+
+	.about-contact {
+		margin: 0;
+		padding-top: 1.5rem;
+		font-size: 0.9375rem;
+		color: var(--stone);
+		border-top: 1px dashed var(--border);
+	}
+
+	.about-contact a {
+		color: var(--brand);
+		text-decoration: none;
+		font-weight: 500;
+	}
+
+	.about-contact a:hover {
+		color: var(--brand-light);
+		text-decoration: underline;
+		text-underline-offset: 3px;
+	}
+
+	/* —— 侧栏：狐狸线稿 + 照片 —— */
+	.about-aside {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		min-width: 0;
+	}
+
+	@media (min-width: 900px) {
+		.about-aside {
+			position: sticky;
+			top: calc(var(--header-h) + 1.5rem);
+		}
+	}
+
+	.about-mark {
+		margin: 0;
+		padding: 1.75rem 1.5rem 1.5rem;
+		text-align: center;
+		background: var(--ivory);
+		border: 1px solid var(--border-soft);
+		border-radius: 0.75rem;
+		box-shadow: var(--shadow-whisper);
+	}
+
+	.about-mark__fox {
+		display: block;
+		width: min(11rem, 55%);
+		height: auto;
+		margin-inline: auto;
+		/* 线稿已是墨蓝，不滤色；轻微呼吸感 */
+		opacity: 0.92;
+		transition: opacity 0.25s ease;
+	}
+
+	.about-mark:hover .about-mark__fox {
+		opacity: 1;
+	}
+
+	.about-mark__caption {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.2rem;
+		margin-top: 1.125rem;
+		padding-top: 1rem;
+		border-top: 1px dashed var(--border);
+	}
+
+	.about-mark__name {
+		font-size: 1rem;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+		color: var(--fg);
+	}
+
+	.about-mark__domain {
+		font-size: 0.75rem;
+		font-family: var(--font-mono), ui-monospace, monospace;
+		letter-spacing: 0.04em;
+		color: var(--stone);
+	}
+
+	.about-photo {
+		min-width: 0;
+	}
+
+	.about-photo :global(.live-photo) {
+		margin-block: 0;
+	}
+
+	.about-photo__note {
+		margin: 0.75rem 0 0;
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--stone);
+		text-align: center;
+		letter-spacing: 0.04em;
+	}
+
+	/* 窄屏：狐狸卡与正文顺序调为「先见人再读文」可更友好——保持文优先 */
+	@media (max-width: 899px) {
+		.about-layout {
+			gap: 2rem;
+		}
+
+		.about-mark {
+			max-width: 18rem;
+			margin-inline: auto;
+		}
+	}
+</style>

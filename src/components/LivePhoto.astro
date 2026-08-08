@@ -55,8 +55,11 @@ type Props = {
 	/**
 	 * `default` — article/embed spacing.
 	 * `wall` — tight margins for photo-wall grids.
+	 * `featured` — homepage lead: 16:9 crop, compact meta.
 	 */
-	variant?: 'default' | 'wall';
+	variant?: 'default' | 'wall' | 'featured';
+	/** Still image loading (default `lazy`; use `eager` for above-the-fold covers) */
+	loading?: 'lazy' | 'eager';
 };
 
 const props = Astro.props;
@@ -70,6 +73,7 @@ const width = props.width ?? fromMeta?.width;
 const height = props.height ?? fromMeta?.height;
 const autoplayOnce = props.autoplayOnce ?? false;
 const sound = props.sound ?? true;
+const loading = props.loading ?? 'lazy';
 const location =
 	props.location ??
 	fromMeta?.location ??
@@ -111,7 +115,12 @@ const capturedAtIso = props.meta?.source?.capturedAt ?? props.meta?.source?.capt
 ---
 
 <figure
-	class:list={['live-photo', 'not-prose', variant === 'wall' && 'live-photo--wall']}
+	class:list={[
+		'live-photo',
+		'not-prose',
+		variant === 'wall' && 'live-photo--wall',
+		variant === 'featured' && 'live-photo--featured',
+	]}
 	data-live-photo
 	data-autoplay-once={autoplayOnce ? '' : undefined}
 	data-sound={sound ? '' : undefined}
@@ -124,8 +133,9 @@ const capturedAtIso = props.meta?.source?.capturedAt ?? props.meta?.source?.capt
 			title={alt}
 			width={width}
 			height={height}
-			loading="lazy"
+			loading={loading}
 			decoding="async"
+			fetchpriority={loading === 'eager' ? 'high' : undefined}
 			draggable="false"
 		/>
 		<video
@@ -252,6 +262,40 @@ const capturedAtIso = props.meta?.source?.capturedAt ?? props.meta?.source?.capt
 	}
 
 	.live-photo--wall .live-photo__coords {
+		font-size: 0.65rem;
+	}
+
+	/* Homepage featured lead: fixed 16:9 crop (matches static heroImage) */
+	.live-photo--featured {
+		margin: 0;
+		width: 100%;
+	}
+
+	.live-photo--featured .live-photo__frame {
+		aspect-ratio: 16 / 9;
+		width: 100%;
+	}
+
+	.live-photo--featured .live-photo__still {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+	}
+
+	.live-photo--featured .live-photo__meta {
+		margin-top: 0.45rem;
+		gap: 0.15rem;
+	}
+
+	.live-photo--featured .live-photo__time,
+	.live-photo--featured .live-photo__location {
+		font-size: 0.7rem;
+	}
+
+	.live-photo--featured .live-photo__coords {
 		font-size: 0.65rem;
 	}
 

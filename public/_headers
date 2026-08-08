@@ -11,9 +11,17 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Self-hosted typefaces (rarely change) — long-lived cache
+# Self-hosted typefaces — long-lived cache
+# CORS: giscus iframe (giscus.app) loads these via theme @font-face
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+
+# Giscus custom theme (iframe stylesheet)
+/giscus-theme.css
+  Cache-Control: public, max-age=86400, must-revalidate
+  Access-Control-Allow-Origin: *
 
 # Pagefind search index / UI — revalidate daily
 /pagefind/*

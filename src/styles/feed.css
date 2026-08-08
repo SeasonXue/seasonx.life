@@ -192,11 +192,35 @@
 	display: block;
 	flex-shrink: 0;
 	text-decoration: none;
+	min-width: 0;
+	width: 100%;
 }
 
 @media (max-width: 767px) {
 	.feed-featured__media {
 		order: -1;
+		/* Cap height on narrow screens so 16:9 doesn't dominate */
+		max-width: 100%;
+	}
+}
+
+@media (min-width: 768px) {
+	.feed-featured__media {
+		/* ~16:9 companion to text column; not taller than copy stack */
+		width: min(28rem, 42vw);
+		max-width: 28rem;
+	}
+}
+
+/* Live Photo featured: interactive, not a link-thumbnail */
+.feed-featured__media--live {
+	width: 100%;
+}
+
+@media (min-width: 768px) {
+	.feed-featured__media--live {
+		width: min(28rem, 42vw);
+		max-width: 28rem;
 	}
 }
 
@@ -204,20 +228,14 @@
 	overflow: hidden;
 	border-radius: 0.5rem;
 	width: 100%;
+	aspect-ratio: 16 / 9;
 	background: var(--warm-sand);
-}
-
-@media (min-width: 768px) {
-	.feed-featured__frame {
-		width: 480px;
-		max-width: 50vw;
-	}
 }
 
 .feed-featured__frame img {
 	display: block;
 	width: 100%;
-	height: auto;
+	height: 100%;
 	object-fit: cover;
 	transition: transform 0.4s ease-in-out;
 }

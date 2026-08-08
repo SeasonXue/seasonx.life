@@ -58,10 +58,13 @@
 			'. extras .'
 			'. comments .';
 		justify-content: space-between;
+		/* keep rails visually clear of main column */
+		column-gap: 0;
 	}
 
 	.post-content {
-		padding-inline: 0;
+		/* breathe away from side dashed rails (was 0 → text hugged borders) */
+		padding-inline: 2.25rem;
 		padding-top: 1.5rem;
 	}
 }
@@ -77,6 +80,14 @@
 @media (min-width: 768px) {
 	.post-toc {
 		display: block;
+		/* extra space between dashed line and TOC text */
+		padding-inline-start: 1.5rem;
+	}
+}
+
+@media (min-width: 1280px) {
+	.post-toc {
+		padding-inline-start: 1.75rem;
 	}
 }
 
@@ -90,6 +101,8 @@
 @media (min-width: 1280px) {
 	.post-meta-rail {
 		display: block;
+		/* extra space between share rail and dashed line */
+		padding-inline-end: 1.75rem;
 	}
 }
 
@@ -273,6 +286,18 @@
 	object-fit: cover;
 }
 
+/* Live Photo cover: component owns frame chrome; avoid double border/margin */
+.post-cover--live {
+	overflow: visible;
+	border: 0;
+	border-radius: 0;
+	background: transparent;
+}
+
+.post-cover--live .live-photo {
+	margin: 0;
+}
+
 /* —— Article body (CF article-content rhythm) —— */
 /* spacing unit ≈ 4px */
 .article-content {
@@ -384,7 +409,8 @@
 	border-top: 1px solid var(--border);
 }
 
-.article-content img {
+/* Standalone markdown images only — do not restyle Live Photo internals */
+.article-content img:not(.live-photo__still) {
 	margin: 2rem 0;
 	border-radius: 0.5rem;
 	border: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
@@ -392,11 +418,29 @@
 	height: auto;
 }
 
-.article-content figure {
+.article-content figure:not(.live-photo) {
 	margin: 2rem 0;
 }
 
-.article-content figcaption {
+/* Live Photo owns its chrome; kill inherited article img/figure spacing */
+.article-content .live-photo {
+	margin: 2rem 0;
+}
+
+.article-content .live-photo__still {
+	margin: 0;
+	border: 0;
+	border-radius: 0;
+	max-width: none;
+}
+
+.article-content .live-photo__meta,
+.article-content .live-photo__meta p {
+	/* article p margin would push caption lines apart */
+	margin: 0;
+}
+
+.article-content figcaption:not(.live-photo__meta) {
 	margin-top: 0.5rem;
 	font-size: 0.75rem;
 	font-family: var(--font-mono), ui-monospace, monospace;

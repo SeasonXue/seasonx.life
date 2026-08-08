@@ -11,6 +11,18 @@ export default defineConfig({
 	integrations: [mdx(), sitemap()],
 	vite: {
 		plugins: [tailwindcss()],
+		// Allow giscus.app iframe to fetch /giscus-theme.css + /fonts/* in local dev
+		// when PUBLIC_GISCUS_THEME_URL points at localhost.
+		server: {
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+			},
+		},
+		preview: {
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+			},
+		},
 	},
 	// 旧「归档」路径 → 照片墙
 	redirects: {

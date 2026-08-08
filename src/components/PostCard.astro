@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { SITE_AUTHOR } from '../consts';
+import { getLive } from '../utils/live-photo';
+import LivePhoto from './LivePhoto.astro';
 
 interface Props {
 	post: CollectionEntry<'blog'>;
@@ -10,13 +12,14 @@ interface Props {
 }
 
 const { post, featured = false } = Astro.props;
-const { title, description, pubDate, heroImage } = post.data;
+const { title, description, pubDate, heroImage, heroLive } = post.data;
 const href = `/blog/${post.id}/`;
 const dateLabel = pubDate.toLocaleDateString('en-US', {
 	year: 'numeric',
 	month: 'long',
 	day: 'numeric',
 });
+const heroLiveMeta = heroLive ? getLive(heroLive) : undefined;
 // Initials for avatar (CF byline)
 const initials = SITE_AUTHOR.replace(/[^\p{L}\p{N}\s]/gu, '')
 	.split(/\s+/)
@@ -45,20 +48,33 @@ const initials = SITE_AUTHOR.replace(/[^\p{L}\p{N}\s]/gu, '')
 					<span class="feed-byline-name">{SITE_AUTHOR}</span>
 				</div>
 			</div>
-			{heroImage && (
-				<a href={href} class="feed-featured__media" tabindex="-1" aria-hidden="true">
-					<div class="feed-featured__frame">
-						<Image
-							src={heroImage}
-							alt=""
-							width={960}
-							height={540}
-							class="aspect-[16/9] object-cover"
-							loading="eager"
-							fetchpriority="high"
-						/>
-					</div>
-				</a>
+			{heroLiveMeta ? (
+				/* Not wrapped in <a> — Live Photo needs click / hover / LIVE controls */
+				<div class="feed-featured__media feed-featured__media--live">
+					<LivePhoto
+						meta={heroLiveMeta}
+						variant="featured"
+						alt={title}
+						loading="eager"
+						autoplayOnce
+					/>
+				</div>
+			) : (
+				heroImage && (
+					<a href={href} class="feed-featured__media" tabindex="-1" aria-hidden="true">
+						<div class="feed-featured__frame">
+							<Image
+								src={heroImage}
+								alt=""
+								width={960}
+								height={540}
+								class="aspect-[16/9] h-full w-full object-cover"
+								loading="eager"
+								fetchpriority="high"
+							/>
+						</div>
+					</a>
+				)
 			)}
 		</article>
 	) : (

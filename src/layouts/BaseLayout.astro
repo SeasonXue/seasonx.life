@@ -8,7 +8,8 @@ import { SITE_LANG } from '../consts';
 interface Props {
 	title: string;
 	description: string;
-	image?: ImageMetadata;
+	/** Optimized asset metadata or a public path / absolute URL (e.g. Live Photo still) */
+	image?: ImageMetadata | string;
 	type?: 'website' | 'article';
 	pubDate?: Date;
 	updatedDate?: Date;

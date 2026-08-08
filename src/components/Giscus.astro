@@ -1,12 +1,22 @@
 ---
 import { GISCUS } from '../consts';
+/** Inlined so giscus.app iframe never fetches localhost / production (CORS + offline). */
+import giscusThemeCss from '../../public/giscus-theme.css?raw';
 
 const enabled = Boolean(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
+
+/**
+ * Prefer data: URL — no network, no CORS.
+ * Optional override: PUBLIC_GISCUS_THEME_URL=https://…/giscus-theme.css
+ */
+const themeOverride = (import.meta.env.PUBLIC_GISCUS_THEME_URL as string | undefined)?.trim();
+const themeUrl =
+	themeOverride || `data:text/css;charset=utf-8,${encodeURIComponent(giscusThemeCss)}`;
 ---
 
 {
 	enabled && (
-		<section class="section-rule-top pt-10" aria-label="评论">
+		<section class="giscus-section section-rule-top pt-10" aria-label="评论">
 			<h2 class="related-heading mb-6!" style="margin-bottom: 1.5rem; font-size: 0.875rem;">
 				评论
 			</h2>
@@ -22,7 +32,7 @@ const enabled = Boolean(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
 				data-reactions-enabled={GISCUS.reactionsEnabled}
 				data-emit-metadata={GISCUS.emitMetadata}
 				data-input-position={GISCUS.inputPosition}
-				data-theme="light"
+				data-theme={themeUrl}
 				data-lang={GISCUS.lang}
 				data-loading={GISCUS.loading}
 				crossorigin="anonymous"

@@ -1,0 +1,279 @@
+/*!
+ * SeasonX giscus theme — parchment + ink-blue + site fonts
+ * Colors / type match src/styles/global.css (Kami tokens).
+ *
+ * Fonts load from this host (same origin as this CSS file).
+ * Requires CORS on /fonts/* so giscus.app iframe can use them.
+ */
+
+/*
+ * Optional webfonts when the live site is reachable (CORS on /fonts/*).
+ * Theme CSS is often inlined as data:; system stacks always work offline.
+ */
+@font-face {
+	font-family: 'TsangerJinKai02';
+	src: url('/fonts/TsangerJinKai02.woff2') format('woff2');
+	font-weight: 400 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'JetBrains Mono';
+	src: url('/fonts/JetBrainsMono.woff2') format('woff2');
+	font-weight: 400 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+main {
+	/* —— Surfaces —— */
+	--color-canvas-default: #f5f4ed;
+	--color-canvas-overlay: #faf9f5;
+	--color-canvas-inset: #faf9f5;
+	--color-canvas-subtle: #faf9f5;
+
+	/* —— Text —— */
+	--color-fg-default: #141413;
+	--color-fg-muted: #504e49;
+	--color-fg-subtle: #6b6a64;
+
+	/* —— Borders (lighter = hairline feel) —— */
+	--color-border-default: #e4e2d6;
+	--color-border-muted: #ebe9df;
+	--color-neutral-muted: rgb(107 106 100 / 10%);
+	--color-primer-shadow-inset: inset 0 1px 0 rgb(232 230 220 / 25%);
+
+	/* —— Brand —— */
+	--color-accent-fg: #1b365d;
+	--color-accent-emphasis: #1b365d;
+	--color-accent-muted: rgb(27 54 93 / 28%);
+	--color-accent-subtle: #eef2f7;
+
+	/* —— Buttons (minimal shadow = thinner chrome) —— */
+	--color-btn-text: #3d3d3a;
+	--color-btn-bg: #faf9f5;
+	--color-btn-border: rgb(20 20 19 / 8%);
+	--color-btn-shadow: 0 0 transparent;
+	--color-btn-inset-shadow: 0 0 transparent;
+	--color-btn-hover-bg: #f0eee6;
+	--color-btn-hover-border: rgb(20 20 19 / 10%);
+	--color-btn-active-bg: #e8e6dc;
+	--color-btn-active-border: rgb(20 20 19 / 10%);
+	--color-btn-selected-bg: #f0eee6;
+
+	--color-btn-primary-text: #faf9f5;
+	--color-btn-primary-bg: #1b365d;
+	--color-btn-primary-border: rgb(20 20 19 / 6%);
+	--color-btn-primary-shadow: 0 0 transparent;
+	--color-btn-primary-inset-shadow: 0 0 transparent;
+	--color-btn-primary-hover-bg: #2d5a8a;
+	--color-btn-primary-hover-border: rgb(20 20 19 / 6%);
+	--color-btn-primary-selected-bg: #1b365d;
+	--color-btn-primary-selected-shadow: 0 0 transparent;
+	--color-btn-primary-disabled-text: rgb(250 249 245 / 75%);
+	--color-btn-primary-disabled-bg: #9aabbf;
+	--color-btn-primary-disabled-border: rgb(20 20 19 / 6%);
+
+	/* —— Segmented control —— */
+	--color-segmented-control-bg: #ebe9df;
+	--color-segmented-control-button-bg: #faf9f5;
+	--color-segmented-control-button-selected-border: #d4d1c4;
+	--color-action-list-item-default-hover-bg: rgb(27 54 93 / 5%);
+
+	/* —— Status —— */
+	--color-success-fg: #3d6b4f;
+	--color-attention-fg: #8a6a20;
+	--color-attention-muted: rgb(138 106 32 / 30%);
+	--color-attention-subtle: #f5efd8;
+	--color-danger-fg: #a33b3b;
+	--color-danger-muted: rgb(163 59 59 / 30%);
+	--color-danger-subtle: #f5e4e2;
+
+	--color-scale-gray-1: #ebe9df;
+	--color-scale-blue-1: #dce6f2;
+	--color-social-reaction-bg-hover: var(--color-scale-gray-1);
+	--color-social-reaction-bg-reacted-hover: var(--color-scale-blue-1);
+
+	/* —— Prettylights —— */
+	--color-prettylights-syntax-comment: #6b6a64;
+	--color-prettylights-syntax-constant: #1b365d;
+	--color-prettylights-syntax-entity: #5a4a7a;
+	--color-prettylights-syntax-storage-modifier-import: #141413;
+	--color-prettylights-syntax-entity-tag: #3d6b4f;
+	--color-prettylights-syntax-keyword: #1b365d;
+	--color-prettylights-syntax-string: #2d5a8a;
+	--color-prettylights-syntax-variable: #8a5a20;
+	--color-prettylights-syntax-brackethighlighter-unmatched: #a33b3b;
+	--color-prettylights-syntax-invalid-illegal-text: #faf9f5;
+	--color-prettylights-syntax-invalid-illegal-bg: #a33b3b;
+	--color-prettylights-syntax-carriage-return-text: #faf9f5;
+	--color-prettylights-syntax-carriage-return-bg: #a33b3b;
+	--color-prettylights-syntax-string-regexp: #3d6b4f;
+	--color-prettylights-syntax-markup-list: #5c4810;
+	--color-prettylights-syntax-markup-heading: #1b365d;
+	--color-prettylights-syntax-markup-italic: #3d3d3a;
+	--color-prettylights-syntax-markup-bold: #141413;
+	--color-prettylights-syntax-markup-deleted-text: #a33b3b;
+	--color-prettylights-syntax-markup-deleted-bg: #f5e4e2;
+	--color-prettylights-syntax-markup-inserted-text: #3d6b4f;
+	--color-prettylights-syntax-markup-inserted-bg: #e4efe8;
+	--color-prettylights-syntax-markup-changed-text: #8a5a20;
+	--color-prettylights-syntax-markup-changed-bg: #f5ead8;
+	--color-prettylights-syntax-markup-ignored-text: #e8e6dc;
+	--color-prettylights-syntax-markup-ignored-bg: #1b365d;
+	--color-prettylights-syntax-meta-diff-range: #5a4a7a;
+	--color-prettylights-syntax-brackethighlighter-angle: #6b6a64;
+	--color-prettylights-syntax-sublimelinter-gutter-mark: #c9c6b8;
+	--color-prettylights-syntax-constant-other-reference-link: #2d5a8a;
+}
+
+main .pagination-loader-container {
+	background-image: url('https://github.com/images/modules/pulls/progressive-disclosure-line.svg');
+}
+
+main .gsc-loading-image {
+	background-image: url('https://github.githubassets.com/images/mona-loading-default.gif');
+}
+
+/* —— Typography: match site (仓耳今楷 + JetBrains Mono) —— */
+.gsc-main,
+.gsc-main button,
+.gsc-main input,
+.gsc-main textarea,
+.gsc-main select {
+	font-family:
+		'TsangerJinKai02',
+		'Source Han Serif SC',
+		'Noto Serif SC',
+		'Songti SC',
+		STSong,
+		Georgia,
+		serif !important;
+	letter-spacing: 0.35px;
+	-webkit-font-smoothing: antialiased;
+}
+
+.gsc-main code,
+.gsc-main pre,
+.gsc-main kbd,
+.gsc-main .gsc-comment-box-textarea {
+	font-variant-ligatures: none;
+}
+
+.gsc-main code,
+.gsc-main pre,
+.gsc-main kbd {
+	font-family:
+		'JetBrains Mono',
+		'SF Mono',
+		'Fira Code',
+		Consolas,
+		Monaco,
+		monospace !important;
+	letter-spacing: 0;
+	font-size: 0.9em;
+}
+
+/* Textarea keeps body font for Chinese writing comfort */
+.gsc-main .gsc-comment-box-textarea,
+.gsc-main .gsc-reply-box .gsc-comment-box-textarea {
+	font-family:
+		'TsangerJinKai02',
+		'Source Han Serif SC',
+		'Noto Serif SC',
+		'Songti SC',
+		STSong,
+		Georgia,
+		serif !important;
+	font-size: 14px;
+	line-height: 1.55;
+	letter-spacing: 0.35px;
+}
+
+/* —— Hairline borders (soften box-shadow “thick” Primer chrome) —— */
+.gsc-comment-box,
+.gsc-reply-box,
+.gsc-social-reaction-summary-item,
+.gsc-reactions-menu,
+.gsc-direct-conversation-notice,
+.gsc-comment,
+.gsc-reply {
+	box-shadow: none !important;
+}
+
+.gsc-comment-box,
+.gsc-reply-box {
+	border-width: 0.5px !important;
+	border-style: solid !important;
+	border-color: var(--color-border-default) !important;
+	border-radius: 0.5rem;
+	background: var(--color-canvas-overlay);
+}
+
+.gsc-comment-box-tabs {
+	border-bottom-width: 0.5px !important;
+	border-bottom-color: var(--color-border-muted) !important;
+	background: transparent !important;
+}
+
+.gsc-comment-box-textarea,
+.gsc-reply-box .gsc-comment-box-textarea {
+	border-width: 0.5px !important;
+	border-color: var(--color-border-muted) !important;
+	border-radius: 0.35rem;
+	box-shadow: none !important;
+	background: var(--color-canvas-inset) !important;
+}
+
+.gsc-comment-box-textarea:focus,
+.gsc-reply-box .gsc-comment-box-textarea:focus {
+	border-color: color-mix(in srgb, #1b365d 45%, var(--color-border-default)) !important;
+	outline: none;
+	box-shadow: 0 0 0 1px color-mix(in srgb, #1b365d 20%, transparent) !important;
+}
+
+/* Segmented 输入 / 预览 */
+.gsc-comment-box-tabs .gsc-comment-box-tab {
+	border-width: 0 !important;
+	box-shadow: none !important;
+}
+
+/* Primary & ghost buttons — thin outline */
+.gsc-comment-box-bottom .btn,
+.gsc-reply-box .btn,
+.gsc-main .btn {
+	box-shadow: none !important;
+	border-width: 0.5px !important;
+	font-weight: 500;
+}
+
+.gsc-main .btn-primary {
+	border-width: 0.5px !important;
+}
+
+/* Reaction chips */
+.gsc-social-reaction-summary-item {
+	border-width: 0.5px !important;
+	border-color: var(--color-border-muted) !important;
+}
+
+/* Timeline / comment cards */
+.gsc-comment-header,
+.gsc-reply-header {
+	border-bottom: none;
+}
+
+.gsc-tl-line {
+	/* vertical thread line */
+	width: 1px !important;
+	background: var(--color-border-muted) !important;
+	opacity: 0.85;
+}
+
+/* Horizontal rules inside markdown */
+.gsc-comment-content hr,
+.gsc-reply-content hr {
+	border: 0;
+	border-top: 0.5px solid var(--color-border-muted);
+}

@@ -1,0 +1,196 @@
+---
+title: '近期的一些碎碎念'
+description: '拾掇一下重新出发——顺便把博客里常用的排版样式走一遍'
+pubDate: '2026-08-08'
+heroLive: '2026-03-30-094329'
+tags: ['生活', '博客']
+category: '随笔'
+draft: true
+---
+
+import LivePhoto from '../../components/LivePhoto.astro';
+import { getLive } from '../../utils/live-photo';
+
+export const liveSunset = getLive('2025-04-18-181243');
+
+这段时间把站点又重新搭了一遍：羊皮纸底、墨蓝强调、照片墙、Live Photo 封面。东西齐了，人却还在半途——所以先写一篇碎碎念，**既是重新出发的备忘，也是正文排版的样例页**。右侧目录可以跳到各节，方便对照效果。
+
+## 为什么又折腾一遍
+
+旧站能写、能发，但有几处一直别扭：
+
+1. **照片和文章是两套世界**——图只是附件，很难和文字同屏呼吸。
+2. **Live Photo 在网页里几乎消失**——浏览器不认 HEIC/MOV，只好当静图。
+3. **气质不统一**——组件多了之后，颜色、字重、边距开始各说各话。
+
+所以这次收敛成几条硬规矩：单一品牌色、正文阅读节奏固定、Live 走本地导入脚本。细节写在仓库的 `docs/brand.md` 和 `docs/live-photo.md` 里，这里只记感受。
+
+> 工具会过时，但「想留下什么」不会。站点只是外壳；外壳舒服了，才愿意多写一点。
+
+## 近期在想的事
+
+### 慢一点没关系
+
+以前总想着「有空再写长文」，结果长文永远不来。现在更认 **短而真**：一段路上的念头、一张 Live、三行代码片段，都算数。
+
+### 技术是手段
+
+Astro、Cloudflare、内容集合……这些是脚手架。脚手架的意义是让 **写和看** 变轻，而不是再开一个要维护的产品。
+
+### 照片墙当时间轴
+
+隔空投送 → `pnpm live:import` → 自动进照片墙。文章需要封面时，frontmatter 里写一句：
+
+```yaml
+heroLive: '2026-03-30-094329'
+```
+
+slug 就是拍摄时间，不用再手工拷贝封面到 `assets`。
+
+## 排版自检：基础元素
+
+下面这些都是日常写文会用到的块，顺手验收一遍。
+
+### 强调与行内
+
+普通段落里可以夹 **加粗**、`行内代码`，以及 [站内链接](/photos/) 或 [外部链接](https://astro.build)。链接用品牌墨蓝，hover 会略亮一点。
+
+键盘快捷键示例：保存用 `⌘S`，搜索用 `⌘K`（若你之后接了命令面板的话）。
+
+### 无序与有序列表
+
+**无序：**
+
+- 羊皮纸背景，不刺眼
+- 单色强调，不彩虹
+- Live Photo 可点可按
+
+**有序：**
+
+1. 导入实况图
+2. 写 frontmatter
+3. 本地预览，再决定是否去掉 `draft`
+
+**嵌套：**
+
+- 写作
+  - 草稿默认开启
+  - 标签尽量少而准
+- 发布
+  1. `draft: false`
+  2. 构建与部署
+  3. 打开评论区看一眼
+
+### 引用
+
+> 最好的博客系统，是你愿意打开编辑器的那个。
+
+长一点的引用也可以多段：
+
+> 西溪的樱花是今年春天的尾声。  
+> 风一过，像素里的粉白就动起来——这大概就是我想把 Live 留在网页上的原因。
+
+### 分隔线
+
+上面是一段话，下面换个话题。
+
+---
+
+有时一条横线就够，不必硬凑小标题。
+
+## 代码示例
+
+### 命令行
+
+```bash
+# 新建草稿（MDX）
+pnpm new:post "近期的一些碎碎念" --mdx --tags 生活,博客 --category 随笔
+
+# 导入 iPhone Live Photo（HEIC + 同名 MOV）
+pnpm live:import ~/Downloads/IMG_0258.HEIC --alt "西溪园区的樱花"
+```
+
+### TypeScript / 工具函数
+
+```ts
+import { getLive, listLive } from '../utils/live-photo';
+
+// 按拍摄时间新 → 旧
+const latest = listLive({ order: 'desc' })[0];
+
+// 文章里嵌入某张 Live
+const sunset = getLive('2025-04-18-181243');
+console.log(sunset.photo, sunset.place?.label);
+```
+
+### 前端片段
+
+```html
+<figure class="live-photo" data-live-photo data-sound>
+  <img class="live-photo__still" src="/images/live/…/photo.jpg" alt="…" />
+  <video class="live-photo__motion" src="/images/live/…/video.mp4" playsinline></video>
+  <button type="button" data-live-toggle>LIVE</button>
+</figure>
+```
+
+行内对比：`const x = 1` 适合短标识；超过一两行就上 fenced block。
+
+## 表格
+
+| 能力 | 用法 | 备注 |
+|------|------|------|
+| 静图封面 | `heroImage: '../../assets/….jpg'` | Astro 会做图片优化 |
+| Live 封面 | `heroLive: 'YYYY-MM-DD-HHmmss'` | 优先于 `heroImage` |
+| 标签 | `tags: ['生活']` | 生成 `/tags/…` |
+| 分类 | `category: '随笔'` | 可选 |
+| 草稿 | `draft: true` | 生产构建默认不输出 |
+
+小表也行：
+
+| 断点 | 布局 |
+|------|------|
+| &lt; md | 单栏 |
+| md+ | 正文 + 目录 |
+| xl+ | 分享轨 + 正文 + 目录 |
+
+## 正文里的 Live Photo
+
+封面已经用了西溪樱花。正文里可以再嵌另一张——例如去年傍晚的海与山。悬停预览，点击或按住 **LIVE** 可带环境声。
+
+<LivePhoto meta={liveSunset} alt="海与火山的日落" />
+
+导入约定很简单：资源在 `public/images/live/<slug>/`，meta 在 `src/data/live/<slug>.json`，组件只认 `getLive(slug)`，不要手写拼路径。
+
+## 图片（静图）
+
+普通 Markdown 图片同样可用（路径相对站点根或外部 URL）：
+
+![站点狐狸标](/logo-fox.png)
+
+若以后把配图放进 `src/assets`，也可以在 frontmatter 用 `heroImage` 走优化管线；正文大图目前以 `public/` 或远程 URL 最省事。
+
+## 再碎几句
+
+### 想写的主题
+
+- 本地工具链：从 HEIC 到可播的 web Live
+- 个人站的「克制」：为什么只留一种强调色
+- 阅读进度、目录、搜索——哪些是真需求，哪些是装饰
+
+### 暂时不做的
+
+- 深色模式（纸张感先站稳）
+- 复杂 CMS（Markdown / MDX 够用）
+- 为了活跃而活跃的打卡式更新
+
+### 给未来的自己
+
+若你三个月后来看这篇，请只回答一个问题：**最近还有没有愿意写下来的瞬间？** 有的话，开一篇新的就好；没有的话，去走路、拍照，再回来。
+
+## 小结
+
+- 站点重建完成：文章、照片墙、Live 封面串起来了。
+- 这篇同时当 **Markdown / MDX 样式样板**：标题层级、列表、引用、代码、表格、Live、图片都在。
+- 草稿状态保留着——等正文再改几轮，再把 `draft` 关掉。
+
+拾掇完了，重新出发。下一篇见。
