@@ -23,8 +23,8 @@ export const SOCIAL_LINKS = {
 export const GISCUS = {
 	repo: 'SeasonXue/seasonx.life',
 	repoId: 'R_kgDOTxOgcA',
-	category: 'Announcements',
-	categoryId: 'DIC_kwDOTxOgcM4DC32b',
+	category: 'General',
+	categoryId: 'DIC_kwDOTxOgcM4DC32c',
 	mapping: 'pathname' as const,
 	reactionsEnabled: '1' as const,
 	emitMetadata: '0' as const,
