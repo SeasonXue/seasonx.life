@@ -267,7 +267,7 @@ Worker → **Settings → Domains & Routes** → 添加 `seasonx.life`（域名�
 `public/_headers` 会在构建后进入 `dist/`：
 
 - 全局：`X-Content-Type-Options`、`X-Frame-Options`、`Referrer-Policy` 等
-- **CSP**：允许本站资源、Bunny 字体、Giscus、Cloudflare Web Analytics、Pagefind Worker
+- **CSP**：允许本站资源、自托管字体、Giscus、Cloudflare Web Analytics、Pagefind Worker 与 WASM（`'wasm-unsafe-eval'`）
 - `/_astro/*`：长缓存 `immutable`（带 hash 的构建产物）
 - `/pagefind/*`：日级缓存 + revalidate
 
