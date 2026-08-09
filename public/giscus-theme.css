@@ -2,17 +2,13 @@
  * SeasonX giscus theme — parchment + ink-blue + site fonts
  * Colors / type match src/styles/global.css (Kami tokens).
  *
- * Fonts load from this host (same origin as this CSS file).
- * Requires CORS on /fonts/* so giscus.app iframe can use them.
+ * Loaded by giscus.app iframe via https://seasonx.life/giscus-theme.css.
+ * Requires CORS on /giscus-theme.css and /fonts/* (see public/_headers).
  */
 
-/*
- * Optional webfonts when the live site is reachable (CORS on /fonts/*).
- * Theme CSS is often inlined as data:; system stacks always work offline.
- */
 @font-face {
 	font-family: 'TsangerJinKai02';
-	src: url('/fonts/TsangerJinKai02.woff2') format('woff2');
+	src: url('https://seasonx.life/fonts/TsangerJinKai02.woff2') format('woff2');
 	font-weight: 400 500;
 	font-style: normal;
 	font-display: swap;
@@ -20,18 +16,30 @@
 
 @font-face {
 	font-family: 'JetBrains Mono';
-	src: url('/fonts/JetBrainsMono.woff2') format('woff2');
+	src: url('https://seasonx.life/fonts/JetBrainsMono.woff2') format('woff2');
 	font-weight: 400 500;
 	font-style: normal;
 	font-display: swap;
 }
 
+/* giscus base.css sets --font-family-* on html; override there + on main */
+html,
+:host,
 main {
-	/* —— Surfaces —— */
+	--font-family-sans:
+		'TsangerJinKai02', 'Source Han Serif SC', 'Noto Serif SC', 'Songti SC', STSong, Georgia,
+		serif;
+	--font-family-monospace:
+		'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, Monaco, monospace;
+	--font-family-default: var(--font-family-sans);
+}
+
+main {
+	/* —— Surfaces: parchment only (no ivory “white cards”) —— */
 	--color-canvas-default: #f5f4ed;
-	--color-canvas-overlay: #faf9f5;
-	--color-canvas-inset: #faf9f5;
-	--color-canvas-subtle: #faf9f5;
+	--color-canvas-overlay: #f5f4ed;
+	--color-canvas-inset: #e8e6dc;
+	--color-canvas-subtle: #f5f4ed;
 
 	/* —— Text —— */
 	--color-fg-default: #141413;
@@ -52,7 +60,7 @@ main {
 
 	/* —— Buttons (minimal shadow = thinner chrome) —— */
 	--color-btn-text: #3d3d3a;
-	--color-btn-bg: #faf9f5;
+	--color-btn-bg: #f5f4ed;
 	--color-btn-border: rgb(20 20 19 / 8%);
 	--color-btn-shadow: 0 0 transparent;
 	--color-btn-inset-shadow: 0 0 transparent;
@@ -77,7 +85,7 @@ main {
 
 	/* —— Segmented control —— */
 	--color-segmented-control-bg: #ebe9df;
-	--color-segmented-control-button-bg: #faf9f5;
+	--color-segmented-control-button-bg: #f5f4ed;
 	--color-segmented-control-button-selected-border: #d4d1c4;
 	--color-action-list-item-default-hover-bg: rgb(27 54 93 / 5%);
 
@@ -128,6 +136,15 @@ main {
 	--color-prettylights-syntax-constant-other-reference-link: #2d5a8a;
 }
 
+html,
+body,
+main {
+	background: transparent !important;
+	font-family: var(--font-family-default) !important;
+	letter-spacing: 0.35px;
+	-webkit-font-smoothing: antialiased;
+}
+
 main .pagination-loader-container {
 	background-image: url('https://github.com/images/modules/pulls/progressive-disclosure-line.svg');
 }
@@ -136,12 +153,9 @@ main .gsc-loading-image {
 	background-image: url('https://github.githubassets.com/images/mona-loading-default.gif');
 }
 
-/* —— Typography: match site (仓耳今楷 + JetBrains Mono) —— */
+/* —— Typography: beat Primer/Tailwind explicit font rules on descendants —— */
 .gsc-main,
-.gsc-main button,
-.gsc-main input,
-.gsc-main textarea,
-.gsc-main select {
+.gsc-main * {
 	font-family:
 		'TsangerJinKai02',
 		'Source Han Serif SC',
@@ -163,7 +177,9 @@ main .gsc-loading-image {
 
 .gsc-main code,
 .gsc-main pre,
-.gsc-main kbd {
+.gsc-main kbd,
+.gsc-main code *,
+.gsc-main pre * {
 	font-family:
 		'JetBrains Mono',
 		'SF Mono',
@@ -191,7 +207,7 @@ main .gsc-loading-image {
 	letter-spacing: 0.35px;
 }
 
-/* —— Hairline borders (soften box-shadow “thick” Primer chrome) —— */
+/* —— Hairline borders; transparent cards so parchment shows through —— */
 .gsc-comment-box,
 .gsc-reply-box,
 .gsc-social-reaction-summary-item,
@@ -202,13 +218,18 @@ main .gsc-loading-image {
 	box-shadow: none !important;
 }
 
+.gsc-comment,
+.gsc-reply {
+	background: transparent !important;
+}
+
 .gsc-comment-box,
 .gsc-reply-box {
 	border-width: 0.5px !important;
 	border-style: solid !important;
 	border-color: var(--color-border-default) !important;
 	border-radius: 0.5rem;
-	background: var(--color-canvas-overlay);
+	background: transparent !important;
 }
 
 .gsc-comment-box-tabs {
@@ -217,6 +238,7 @@ main .gsc-loading-image {
 	background: transparent !important;
 }
 
+/* Warm-sand inset marks the editable field without a white slab */
 .gsc-comment-box-textarea,
 .gsc-reply-box .gsc-comment-box-textarea {
 	border-width: 0.5px !important;
@@ -237,6 +259,7 @@ main .gsc-loading-image {
 .gsc-comment-box-tabs .gsc-comment-box-tab {
 	border-width: 0 !important;
 	box-shadow: none !important;
+	background: transparent !important;
 }
 
 /* Primary & ghost buttons — thin outline */
@@ -256,6 +279,7 @@ main .gsc-loading-image {
 .gsc-social-reaction-summary-item {
 	border-width: 0.5px !important;
 	border-color: var(--color-border-muted) !important;
+	background: transparent !important;
 }
 
 /* Timeline / comment cards */
@@ -276,4 +300,18 @@ main .gsc-loading-image {
 .gsc-reply-content hr {
 	border: 0;
 	border-top: 0.5px solid var(--color-border-muted);
+}
+
+/* Primer color-bg-* helpers that otherwise paint solid cards */
+.gsc-main .color-bg-primary,
+.gsc-main .color-bg-default,
+.gsc-main .color-bg-canvas,
+.gsc-main .color-bg-secondary,
+.gsc-main .color-bg-subtle,
+.gsc-main .color-bg-tertiary {
+	background-color: transparent !important;
+}
+
+.gsc-main .color-bg-inset {
+	background-color: var(--color-canvas-inset) !important;
 }

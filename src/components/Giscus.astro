@@ -1,17 +1,14 @@
 ---
 import { GISCUS } from '../consts';
-/** Inlined so giscus.app iframe never fetches localhost / production (CORS + offline). */
-import giscusThemeCss from '../../public/giscus-theme.css?raw';
 
 const enabled = Boolean(GISCUS.repo && GISCUS.repoId && GISCUS.categoryId);
 
 /**
- * Prefer data: URL — no network, no CORS.
+ * Custom theme must be https:// (giscus Theme type).
  * Optional override: PUBLIC_GISCUS_THEME_URL=https://…/giscus-theme.css
  */
 const themeOverride = (import.meta.env.PUBLIC_GISCUS_THEME_URL as string | undefined)?.trim();
-const themeUrl =
-	themeOverride || `data:text/css;charset=utf-8,${encodeURIComponent(giscusThemeCss)}`;
+const themeUrl = themeOverride || new URL('/giscus-theme.css', Astro.site).href;
 ---
 
 {
