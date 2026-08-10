@@ -56,12 +56,42 @@ pnpm live:import ~/Downloads/IMG_8279.HEIC --no-geocode
 | `--slug-from time\|name` | 默认命名：`time` 拍摄时间（默认）/ `name` 源文件名 |
 | `--alt` / `--caption` | 写入 meta 的默认文案 |
 | `--width <n>` | 静图最大宽，默认 1600 |
+| `--quality <n>` | 静图 JPEG 质量 1–100，默认 80 |
 | `--video-max <n>` | 视频长边最大，默认 1280 |
+| `--video-crf <n>` | 视频 x264 CRF，越大越小，默认 26 |
 | `--no-geocode` | 跳过 Nominatim 反查 |
 | `--force` | 覆盖已有目录 / meta |
 | `--dry-run` | 只打印计划 |
 
 脚本入口：`scripts/import-live-photo.mjs`（`package.json` → `live:import`）。
+
+## 压缩
+
+导入时**默认已压缩**：静图用 `sharp`（mozjpeg + 渐进式 + 去元数据）重编码，视频用 `ffmpeg`（H.264 + AAC，`+faststart`）。想调强度用 `--quality`（静图）与 `--video-crf`（视频）。
+
+### 重压缩已有素材：`pnpm live:compress`
+
+对 `public/images/live/` 下**已提交**的 `photo.jpg` + `video.mp4` 原地重压缩。尺寸与时长保持不变，因此 `src/data/live/<slug>.json` 无需改动。
+
+```bash
+pnpm live:compress                 # 压缩全部 slug
+pnpm live:compress --only 2025-04-18-181243   # 只压某一个
+pnpm live:compress --dry-run       # 只看计划与体积，不写文件
+pnpm live:compress --quality 78 --crf 28      # 更激进
+pnpm live:compress --force         # 重压后更大也覆盖（默认跳过）
+```
+
+| 选项 | 默认 | 说明 |
+|------|------|------|
+| `--only <slug>` | 全部 | 限定单个 slug 目录 |
+| `--quality <n>` | 80 | 静图 JPEG 质量 1–100 |
+| `--crf <n>` | 26 | 视频 x264 CRF，越大越小 |
+| `--force` | 关 | 重压后更大时仍覆盖 |
+| `--dry-run` | 关 | 只打印，不写入 |
+
+- **默认「不更小就保留原文件」**：对同一素材重复跑不会越跑越糊；真要再压得用 `--force` 或调低 `--quality` / 调高 `--crf`。每次覆盖都是一次有损再编码，避免反复跑同一文件。
+- 依赖：`ffmpeg`（视频）+ `sharp`（静图，随 `pnpm install` 安装）。**跨平台**，Linux / macOS 均可（不像 `live:import` 需要 macOS 的 `sips` / `mdls`）。
+- 压缩内核与导入共用：`scripts/lib/media.mjs`（`compressJpeg` / `encodeVideo`）；脚本入口 `scripts/compress-live.mjs`（`package.json` → `live:compress`）。
 
 ## 照片墙
 

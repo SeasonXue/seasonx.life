@@ -167,6 +167,17 @@ src/data/live/<slug>.json             # 页面 import
 
 - 默认 `--slug-from time`（拍摄时间）；`--slug-from name` 用源文件名；`--slug foo` 自定义  
 - 转码 JPEG + H.264/AAC、提取 GPS、可选 OSM 反查地名（**原文，不翻译**）
+- **默认已压缩**：静图 `sharp`（mozjpeg），视频 `ffmpeg`（H.264）；调强度用 `--quality`（默认 80）与 `--video-crf`（默认 26）
+
+已提交的旧素材想再瘦身，用 `pnpm live:compress`（原地重压缩，尺寸/时长不变，`meta` 无需改）：
+
+```bash
+pnpm live:compress             # 全部
+pnpm live:compress --dry-run   # 只看降幅
+pnpm live:compress --only 2025-04-18-181243 --quality 78 --crf 28
+```
+
+细节见 [`docs/live-photo.md`](./docs/live-photo.md)。
 
 #### 3. 在页面 / MDX 中引用
 
@@ -300,7 +311,8 @@ Pagefind 在 `pnpm build` 之后索引 `dist/`。开发模式（`pnpm dev`）下
 | `pnpm check` | Astro / TypeScript 检查 |
 | `pnpm cf:dev` | 构建后用 Wrangler 本地预览 |
 | `pnpm cf:deploy` | 构建并部署到 Cloudflare Workers |
-| `pnpm live:import <still> [mov]` | 导入 Live Photo → `public/images/live` + `src/data/live` |
+| `pnpm live:import <still> [mov]` | 导入 Live Photo（默认压缩）→ `public/images/live` + `src/data/live` |
+| `pnpm live:compress` | 重压缩 `public/images/live` 下已有素材（静图 + 视频） |
 
 ## 许可
 
