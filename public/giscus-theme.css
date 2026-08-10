@@ -47,6 +47,9 @@ main {
 	--color-fg-subtle: #6b6a64;
 
 	/* —— Borders (lighter = hairline feel) —— */
+	/* Single source of truth for every stroke so lines stay monoline/uniform.
+	   1px renders identically across DPIs (0.5px rounds to 0 or 1 unevenly). */
+	--kami-line: 1px;
 	--color-border-default: #e4e2d6;
 	--color-border-muted: #ebe9df;
 	--color-neutral-muted: rgb(107 106 100 / 10%);
@@ -225,7 +228,7 @@ main .gsc-loading-image {
 
 .gsc-comment-box,
 .gsc-reply-box {
-	border-width: 0.5px !important;
+	border-width: var(--kami-line) !important;
 	border-style: solid !important;
 	border-color: var(--color-border-default) !important;
 	border-radius: 0.5rem;
@@ -233,7 +236,7 @@ main .gsc-loading-image {
 }
 
 .gsc-comment-box-tabs {
-	border-bottom-width: 0.5px !important;
+	border-bottom-width: var(--kami-line) !important;
 	border-bottom-color: var(--color-border-muted) !important;
 	background: transparent !important;
 }
@@ -241,7 +244,7 @@ main .gsc-loading-image {
 /* Warm-sand inset marks the editable field without a white slab */
 .gsc-comment-box-textarea,
 .gsc-reply-box .gsc-comment-box-textarea {
-	border-width: 0.5px !important;
+	border-width: var(--kami-line) !important;
 	border-color: var(--color-border-muted) !important;
 	border-radius: 0.35rem;
 	box-shadow: none !important;
@@ -252,7 +255,7 @@ main .gsc-loading-image {
 .gsc-reply-box .gsc-comment-box-textarea:focus {
 	border-color: color-mix(in srgb, #1b365d 45%, var(--color-border-default)) !important;
 	outline: none;
-	box-shadow: 0 0 0 1px color-mix(in srgb, #1b365d 20%, transparent) !important;
+	box-shadow: 0 0 0 var(--kami-line) color-mix(in srgb, #1b365d 20%, transparent) !important;
 }
 
 /* Segmented 输入 / 预览 */
@@ -267,17 +270,17 @@ main .gsc-loading-image {
 .gsc-reply-box .btn,
 .gsc-main .btn {
 	box-shadow: none !important;
-	border-width: 0.5px !important;
+	border-width: var(--kami-line) !important;
 	font-weight: 500;
 }
 
 .gsc-main .btn-primary {
-	border-width: 0.5px !important;
+	border-width: var(--kami-line) !important;
 }
 
 /* Reaction chips */
 .gsc-social-reaction-summary-item {
-	border-width: 0.5px !important;
+	border-width: var(--kami-line) !important;
 	border-color: var(--color-border-muted) !important;
 	background: transparent !important;
 }
@@ -290,7 +293,7 @@ main .gsc-loading-image {
 
 .gsc-tl-line {
 	/* vertical thread line */
-	width: 1px !important;
+	width: var(--kami-line) !important;
 	background: var(--color-border-muted) !important;
 	opacity: 0.85;
 }
@@ -299,7 +302,7 @@ main .gsc-loading-image {
 .gsc-comment-content hr,
 .gsc-reply-content hr {
 	border: 0;
-	border-top: 0.5px solid var(--color-border-muted);
+	border-top: var(--kami-line) solid var(--color-border-muted);
 }
 
 /* Primer color-bg-* helpers that otherwise paint solid cards */
