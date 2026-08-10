@@ -31,6 +31,13 @@ import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, dirname, extname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import {
+	compressJpeg,
+	DEFAULT_JPEG_QUALITY,
+	DEFAULT_VIDEO_CRF,
+	encodeVideo,
+} from './lib/media.mjs';
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PUBLIC_LIVE = join(ROOT, 'public', 'images', 'live');
 const DATA_LIVE = join(ROOT, 'src', 'data', 'live');
@@ -50,7 +57,9 @@ Import Apple Live Photo into site folders + write importable meta JSON.
   --alt <text>            Default alt in meta
   --caption <text>        Default caption in meta
   --width <n>             Max still width (default ${DEFAULT_STILL_WIDTH})
+  --quality <n>           Still JPEG quality 1-100 (default ${DEFAULT_JPEG_QUALITY})
   --video-max <n>         Max video long edge (default ${DEFAULT_VIDEO_MAX})
+  --video-crf <n>         Video x264 CRF, lower = larger (default ${DEFAULT_VIDEO_CRF})
   --no-geocode            Skip reverse geocode
   --force                 Overwrite existing
   --dry-run               Plan only
@@ -67,7 +76,9 @@ function parseArgs(argv) {
 		alt: null,
 		caption: null,
 		width: DEFAULT_STILL_WIDTH,
+		quality: DEFAULT_JPEG_QUALITY,
 		videoMax: DEFAULT_VIDEO_MAX,
+		videoCrf: DEFAULT_VIDEO_CRF,
 		geocode: true,
 		force: false,
 		dryRun: false,
@@ -89,7 +100,9 @@ function parseArgs(argv) {
 		} else if (a === '--alt') args.alt = argv[++i];
 		else if (a === '--caption') args.caption = argv[++i];
 		else if (a === '--width') args.width = Number(argv[++i]);
+		else if (a === '--quality') args.quality = Number(argv[++i]);
 		else if (a === '--video-max') args.videoMax = Number(argv[++i]);
+		else if (a === '--video-crf') args.videoCrf = Number(argv[++i]);
 		else if (a.startsWith('-')) die(`Unknown option: ${a}`);
 		else positionals.push(a);
 	}
@@ -230,53 +243,18 @@ function findCompanionVideo(stillPath) {
 
 // ─── media conversion ──────────────────────────────────────────────────────
 
-function convertStill(stillPath, outJpg, maxWidth) {
+async function convertStill(stillPath, outJpg, { maxWidth, quality }) {
+	// sips decodes HEIC/JPEG to a full-size JPEG; sharp then resizes + compresses
+	// (mozjpeg, progressive, metadata stripped) for a much smaller web asset.
 	const tmp = `${outJpg}.full.jpg`;
-	run('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '92', stillPath, '--out', tmp]);
-	run('sips', ['--resampleWidth', String(maxWidth), tmp, '--out', outJpg]);
+	run('sips', ['-s', 'format', 'jpeg', '-s', 'formatOptions', '100', stillPath, '--out', tmp]);
+	const info = await compressJpeg(tmp, outJpg, { maxWidth, quality });
 	rmSync(tmp, { force: true });
+	return info;
 }
 
-function convertVideo(videoPath, outMp4, maxEdge) {
-	// scale so long edge ≤ maxEdge; keep audio as AAC
-	const vf = `scale='min(${maxEdge},iw)':'min(${maxEdge},ih)':force_original_aspect_ratio=decrease`;
-	run('ffmpeg', [
-		'-y',
-		'-hide_banner',
-		'-loglevel',
-		'error',
-		'-i',
-		videoPath,
-		'-r',
-		'30',
-		'-c:v',
-		'libx264',
-		'-preset',
-		'slow',
-		'-crf',
-		'22',
-		'-pix_fmt',
-		'yuv420p',
-		'-vf',
-		vf,
-		'-c:a',
-		'aac',
-		'-b:a',
-		'128k',
-		'-ac',
-		'2',
-		'-movflags',
-		'+faststart',
-		outMp4,
-	]);
-}
-
-function probeImageSize(jpgPath) {
-	const w = runSoft('sips', ['-g', 'pixelWidth', jpgPath]);
-	const h = runSoft('sips', ['-g', 'pixelHeight', jpgPath]);
-	const width = Number((w.match(/pixelWidth:\s*(\d+)/) || [])[1]) || 0;
-	const height = Number((h.match(/pixelHeight:\s*(\d+)/) || [])[1]) || 0;
-	return { width, height };
+function convertVideo(videoPath, outMp4, { maxEdge, crf }) {
+	encodeVideo(videoPath, outMp4, { maxEdge, crf });
 }
 
 function probeVideo(mp4Path) {
@@ -527,12 +505,15 @@ async function main() {
 	mkdirSync(assetDir, { recursive: true });
 	mkdirSync(DATA_LIVE, { recursive: true });
 
-	console.log('→ converting still…');
-	convertStill(args.still, photoOut, args.width);
-	const stillSize = probeImageSize(photoOut);
+	console.log('→ converting + compressing still…');
+	const stillInfo = await convertStill(args.still, photoOut, {
+		maxWidth: args.width,
+		quality: args.quality,
+	});
+	const stillSize = { width: stillInfo.width, height: stillInfo.height };
 
-	console.log('→ converting video (H.264 + AAC)…');
-	convertVideo(videoPath, videoOut, args.videoMax);
+	console.log('→ converting + compressing video (H.264 + AAC)…');
+	convertVideo(videoPath, videoOut, { maxEdge: args.videoMax, crf: args.videoCrf });
 	const videoInfo = probeVideo(videoOut);
 
 	console.log('→ extracting metadata…');
