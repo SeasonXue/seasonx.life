@@ -15,6 +15,7 @@
     "cf:deploy": "pnpm build && wrangler deploy",
     "cf:deploy:dry": "pnpm build && wrangler deploy --dry-run",
     "live:import": "node scripts/import-live-photo.mjs",
+    "live:compress": "node scripts/compress-live.mjs",
     "new:post": "node scripts/new-post.mjs"
   },
   "dependencies": {
