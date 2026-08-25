@@ -73,7 +73,7 @@ pnpm check    # 类型与 Astro 检查
 └── package.json
 ```
 
-品牌色、狐狸线稿变体、favicon 规则见 **[docs/brand.md](docs/brand.md)**。
+品牌色、3D 狐狸变体、favicon 规则见 **[docs/brand.md](docs/brand.md)**。
 
 ## 写文章
 
