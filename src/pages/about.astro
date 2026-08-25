@@ -146,10 +146,10 @@ const interests = [
 				<aside class="about-aside" aria-label="视觉侧栏">
 					<figure class="about-mark">
 						<img
-							src="/logo-fox-sitting.png"
+							src="/logo-fox-sitting.jpg"
 							alt=""
-							width="280"
-							height="280"
+							width="640"
+							height="640"
 							class="about-mark__fox"
 							loading="eager"
 							decoding="async"
@@ -326,7 +326,7 @@ const interests = [
 		text-underline-offset: 3px;
 	}
 
-	/* —— 侧栏：狐狸线稿 + 照片 —— */
+	/* —— 侧栏：狐狸形象 + 照片 —— */
 	.about-aside {
 		display: flex;
 		flex-direction: column;
@@ -343,7 +343,8 @@ const interests = [
 
 	.about-mark {
 		margin: 0;
-		padding: 1.75rem 1.5rem 1.5rem;
+		padding: 0;
+		overflow: hidden;
 		text-align: center;
 		background: var(--ivory);
 		border: 1px solid var(--border-soft);
@@ -353,16 +354,9 @@ const interests = [
 
 	.about-mark__fox {
 		display: block;
-		width: min(11rem, 55%);
+		width: 100%;
 		height: auto;
-		margin-inline: auto;
-		/* 线稿已是墨蓝，不滤色；轻微呼吸感 */
-		opacity: 0.92;
-		transition: opacity 0.25s ease;
-	}
-
-	.about-mark:hover .about-mark__fox {
-		opacity: 1;
+		margin: 0;
 	}
 
 	.about-mark__caption {
@@ -370,8 +364,7 @@ const interests = [
 		flex-direction: column;
 		align-items: center;
 		gap: 0.2rem;
-		margin-top: 1.125rem;
-		padding-top: 1rem;
+		padding: 1rem 1.5rem 1.375rem;
 		border-top: 1px dashed var(--border);
 	}
 
